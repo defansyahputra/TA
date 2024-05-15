@@ -179,7 +179,7 @@ class Tank_auth
 	 * @param bool
 	 * @return    array
 	 */
-	function create_user($username, $email, $password, $email_activation, $custom)
+	function create_user($username, $email, $nohp, $klinik, $kategori_pasien, $tanggal_lahir, $jenis_kelamin, $alamat, $password, $email_activation, $custom)
 	{
 		if ((strlen($username) > 0) and !$this->ci->users->is_username_available($username)) {
 			$this->error = array('username' => 'auth_username_in_use');
@@ -196,6 +196,12 @@ class Tank_auth
 				'username' => $username,
 				'password' => $hashed_password,
 				'email' => $email,
+				'nohp' => $nohp,
+				'id_klinik' => $klinik,
+				'kategori_pasien' => $kategori_pasien,
+				'tanggal_lahir' => $tanggal_lahir,
+				'jenis_kelamin' => $jenis_kelamin,
+				'alamat' => $alamat,
 				'last_ip' => $this->ci->input->ip_address(),
 				'approved' => (int)$this->ci->config->item('acct_approval', 'tank_auth')
 			);

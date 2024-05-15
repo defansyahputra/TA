@@ -40,4 +40,12 @@ class Usersmanagement_model extends CI_Model
 		$this->db->where($condition);
 		$this->db->update('user_profiles', $custom);
 	}
+
+	function getAllKlinik()
+    {
+      $this->db->from('tb_klinik');
+      $query = $this->db->get();
+
+      return $query->result();
+    }
 }

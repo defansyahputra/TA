@@ -271,6 +271,10 @@ class Auth extends CI_Controller
 				if (!is_null($data = $this->tank_auth->create_user(
 					$use_username ? $this->form_validation->set_value('username') : '',
 					$this->form_validation->set_value('email'),
+					$this->form_validation->set_value('nohp'),
+					$this->form_validation->set_value('tanggal_lahir'),
+					$this->form_validation->set_value('jenis_kelamin'),
+					$this->form_validation->set_value('alamat'),
 					$this->form_validation->set_value('password'),
 					$email_activation,
 					$custom

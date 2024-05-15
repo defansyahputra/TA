@@ -95,6 +95,12 @@ class Usersmanagement extends CI_Controller
 			$this->form_validation->set_rules('username', 'Username', 'trim|required|min_length[' . $this->config->item('username_min_length', 'tank_auth') . ']|max_length[' . $this->config->item('username_max_length', 'tank_auth') . ']|callback__check_username_blacklist|callback__check_username_exists');
 		}
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
+		$this->form_validation->set_rules('nohp', 'No Hp', 'required'); 
+		$this->form_validation->set_rules('klinik', 'Klinik', 'required'); 
+		$this->form_validation->set_rules('kategori_pasien', 'Kategori Pasien', 'required'); 
+		$this->form_validation->set_rules('tanggal_lahir', 'Tanggal Lahir', 'required');
+		$this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
+		$this->form_validation->set_rules('alamat', 'Alamat', 'required');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[' . $this->config->item('password_min_length', 'tank_auth') . ']|max_length[' . $this->config->item('password_max_length', 'tank_auth') . ']');
 		$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'trim|required|matches[password]');
 
@@ -172,6 +178,12 @@ class Usersmanagement extends CI_Controller
 			if (!is_null($data = $this->tank_auth->create_user(
 				$use_username ? $this->form_validation->set_value('username') : '',
 				$this->form_validation->set_value('email'),
+				$this->form_validation->set_value('nohp'),
+				$this->form_validation->set_value('selected_klinik'),
+				$this->form_validation->set_value('kategori_pasien'),
+				$this->form_validation->set_value('tanggal_lahir'),
+				$this->form_validation->set_value('jenis_kelamin'),
+				$this->form_validation->set_value('alamat'),
 				$this->form_validation->set_value('password'),
 				$email_activation,
 				$custom
@@ -206,6 +218,7 @@ class Usersmanagement extends CI_Controller
 		// $this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
 		// $this->data['debug'] = $this->tank_auth->debug('14');
+		$this->data['list_klinik'] = $this->Usersmanagement_model->getAllKlinik();
 		$this->data['use_username'] = $use_username;
 
 		$this->data['action'] = site_url('Usersmanagement/add');
