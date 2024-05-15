@@ -36,7 +36,7 @@ $selected_klinik = array(
     'name' => 'klinik',
     'id' => 'klinik',
     'class' => 'form-control',
-    'value' => set_value('selected_klinik'),
+    'value' => set_value('klinik'),
     'autocomplete' => 'off'
 );
 $tanggal_lahir = array(
@@ -138,7 +138,7 @@ $foto = array(
                           <select name="klinik" class="form-select" data-control="select2" data-placeholder="Pilih Klinik . . .">
                               <option value="">Pilih Klinik</option>
                               <?php foreach ($list_klinik as $klinik): ?>
-                                  <option value="<?= encrypt_url($klinik->id_klinik); ?>" <?= ($klinik->id_klinik == $selected_klinik) ? 'selected' : ''; ?>>
+                                  <option value="<?= $klinik->id_klinik; ?>" <?= ($klinik->id_klinik == $selected_klinik) ? 'selected' : ''; ?>>
                                       <?= $klinik->klinik; ?>
                                   </option>
                               <?php endforeach; ?>

@@ -56,11 +56,11 @@
                             <i class="bx bx-dots-vertical-rounded"></i>
                           </button>
                           <div class="dropdown-menu">
-                            <?php if ($user->activated != 0) { ?>
+                            <!-- <?php if ($user->activated != 0) { ?>
                               <a class="dropdown-item" href="<?php echo site_url('Usersmanagement/update/' . $user->id_user); ?>">
                                 <i class="bx bx-edit-alt me-1"></i> Edit
                               </a>
-                            <?php } ?>
+                            <?php } ?> -->
                             <?php
                             if ($user->banned == '1') {
                             ?>

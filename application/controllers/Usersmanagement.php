@@ -179,7 +179,7 @@ class Usersmanagement extends CI_Controller
 				$use_username ? $this->form_validation->set_value('username') : '',
 				$this->form_validation->set_value('email'),
 				$this->form_validation->set_value('nohp'),
-				$this->form_validation->set_value('selected_klinik'),
+				$this->form_validation->set_value('klinik'),
 				$this->form_validation->set_value('kategori_pasien'),
 				$this->form_validation->set_value('tanggal_lahir'),
 				$this->form_validation->set_value('jenis_kelamin'),
@@ -206,7 +206,7 @@ class Usersmanagement extends CI_Controller
 					unset($this->data['password']); // Clear password (just for any case)
 				}
 
-				redirect('Usersmanagement');
+				redirect('Pasien');
 			} else {
 				$errors = $this->tank_auth->get_error_message();
 
@@ -232,103 +232,14 @@ class Usersmanagement extends CI_Controller
 		// }
 	}
 
-	function update($id)
+	function delete($id)
 	{
-		$this->data['title'] = "Pengaturan Pengguna";
+		$condition['id'] = $id;
+		$this->Usersmanagement_model->deleteUser($condition);
 
-		$this->data['breadcrumbs'] = [];
-
-		$this->data['breadcrumbs'][] = [
-			'active' => FALSE,
-			'text' => 'Pengaturan / ',
-			'class' => 'breadcrumb-item pe-3',
-			'href' => ''
-		];
-
-		$this->data['breadcrumbs'][] = [
-			'active' => TRUE,
-			'text' => 'Pengaturan Pengguna',
-			'class' => 'breadcrumb-item pe-3 text-gray-400',
-			'href' => site_url('Usermanagement')
-		];
-
-		$this->form_validation->set_rules('username', 'Username', 'required');
-		$this->form_validation->set_rules('nama_lengkap', 'Nama Lengkap', 'required');
-		$this->form_validation->set_rules('email', 'Email', 'required');
-
-		if ($this->form_validation->run() == TRUE) {
-
-			$data = [
-				'username' => $this->input->post('username'),
-				'email' => $this->input->post('email')
-			];
-
-			$user = $this->Usersmanagement_model->getUser($id);
-
-			$config['upload_path'] = './assets/media/profiles';
-			$config['allowed_types'] = 'gif|jpg|png';
-			$config['max_size'] = 2000;
-			$config['max_width'] = 1024;
-			$config['max_height'] = 768;
-			$config['file_name'] = uniqid();
-
-			$this->load->library('upload', $config);
-
-			if ($this->upload->do_upload('foto')) {
-				if ($user->foto != "no_image.png") {
-					if (file_exists('./assets/media/profiles/' . $user->foto)) {
-						unlink('./assets/media/profiles/' . $user->foto);
-					}
-				}
-				$foto = $this->upload->data();
-				$image = $foto["file_name"];
-			} else {
-				$image = $user->foto;
-			}
-
-			$custom = [
-				'name' => $this->input->post('nama_lengkap'),
-				'gender' => $this->input->post('gender'),
-				'tanggal_lahir' => $this->input->post('tanggal_lahir'),
-				'alamat' => $this->input->post('alamat'),
-				'foto' => $image
-			];
-
-			$condition['id'] = $id;
-
-			$this->Usersmanagement_model->updateUser($data, $condition);
-			$this->Usersmanagement_model->updateUserProfile($custom, $condition);
-
-			redirect('Pasien');
-		} else {
-			$this->data['nama_lengkap'] = $this->input->post('nama_lengkap');
-			$this->data['username'] = $this->input->post('username');
-			$this->data['email'] = $this->input->post('email');
-
-			$user = $this->Usersmanagement_model->getUser($id);
-
-			$this->data['data_username'] = $user->username;
-			$this->data['data_email'] = $user->email;
-			$this->data['data_name'] = $user->name;
-			$this->data['data_foto'] = $user->foto;
-			$this->data['data_jenis_kelamin'] = $user->gender;
-			$this->data['data_tangal_lahir'] = $user->tanggal_lahir;
-			$this->data['data_alamat'] = $user->alamat;
-			$this->data['data_foto'] = $user->foto;
-
-			$this->data['action'] = site_url('Usersmanagement/update/' . $id);
-			$this->data['url'] = site_url('Usersmanagement');
-
-			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
-
-			$this->load->view('component/header', $this->data);
-			$this->load->view('component/sidebar', $this->data);
-			$this->load->view('component/navbar', $this->data);
-			$this->load->view('usersmanagement/form', $this->data);
-			$this->load->view('component/footer');
-		}
+		redirect('Pasien');
 	}
-
+	
 	function banned($id)
 	{
 		$condition['id'] = $id;

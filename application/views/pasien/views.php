@@ -40,7 +40,7 @@
                                 <h4 class="card-header fw-bold px-1 pt-3 pb-3">List Pasien</h4>
                                 <div class="table-responsive text-nowrap">
                                     <div class="pb-3 pt-4">
-                                        <a href="<?= site_url('Pasien/add') ?>">
+                                        <a href="<?= site_url('Usersmanagement/add') ?>">
                                             <button class="btn btn-outline-primary" tabindex="0" aria-controls="DataTables_Table_0" type="button">
                                                 <i class="bx bx-plus-circle me-sm-1"></i>
                                                 <span class="d-none d-sm-inline-block">Tambah Pasien</span>
@@ -87,7 +87,21 @@
                                     <td class="text-center"><?= $pasien->nohp; ?></td>
                                     <td class="text-center"><?= $pasien->jenis_kelamin; ?></td>
                                     <td class="text-center"><?= $pasien->tanggal_lahir; ?></td>
-                                    <td class="text-center"><?= $pasien->username; ?></td>
+                                    <td class="text-center">
+                                        <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="<?php echo site_url('Usersmanagement/rekammedis/' . $pasien->id); ?>">
+                                            <i class="bx bx-edit-alt me-1"></i> Edit
+                                            </a>
+                                            <a class="dropdown-item" href="<?php echo site_url('Usersmanagement/delete/' . $pasien->id); ?>" onclick="return confirm('Are You Sure Want to Delete This Data?')">
+                                            <i class="bx bx-trash me-1"></i> Delete
+                                            </a>
+                                        </div>
+                                        </div>
+                                    </td>
                                     </tr>
                                     <?php 
                                     $no++;

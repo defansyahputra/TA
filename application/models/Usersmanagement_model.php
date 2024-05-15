@@ -48,4 +48,13 @@ class Usersmanagement_model extends CI_Model
 
       return $query->result();
     }
+
+	function deleteUser($condition)
+	{
+		$this->db->where($condition);
+		$this->db->delete('users');
+
+		$this->db->where($condition);
+		$this->db->delete('user_profiles');
+	}
 }

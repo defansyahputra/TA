@@ -48,7 +48,7 @@
                                     ?>
                                         <tr>
                                             <td class='text-center'><?php echo $no; ?></td>
-                                            <td class='text-center'><?php echo $klinik->nama; ?></td>
+                                            <td class='text-center'><?php echo $klinik->klinik; ?></td>
                                             <td class='text-center'><?php echo $klinik->alamat; ?></td>
                                             <td class='text-center'>
                                                 <div class="dropdown">

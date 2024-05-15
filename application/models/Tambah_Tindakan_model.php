@@ -10,7 +10,7 @@ class Tambah_tindakan_model extends CI_Model
 
 	public function getAllTindakan()
 	{
-		$this->db->from("tb_tindakan");
+		$this->db->from("view_tindakan");
 		return $this->db->get();
 	}
 

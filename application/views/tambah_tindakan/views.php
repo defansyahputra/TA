@@ -49,7 +49,7 @@
                                     ?>
                                         <tr>
                                             <td class='text-center'><?php echo $no; ?></td>
-                                            <td class='text-center'><?php echo $tindakan->id_kategori_tindakan; ?></td>
+                                            <td class='text-center'><?php echo $tindakan->kategori_tindakan; ?></td>
                                             <td class='text-center'><?php echo $tindakan->tindakan; ?></td>
                                             <td class='text-center'><?php echo $tindakan->harga; ?></td>
                                             <td class='text-center'>
