@@ -45,6 +45,7 @@ class Tambah_Tindakan extends CI_Controller
 			$this->data['openMenu'] = $this->Showmenu_model->getDataOpenMenu($OpenShowMenu->id_menu_parent);
 
 			$this->load->model("Tambah_tindakan_model");
+			$this->load->helper("rupiah");
 		}
 	}
  

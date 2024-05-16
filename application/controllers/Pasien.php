@@ -73,66 +73,55 @@ class Pasien extends CI_Controller
         $this->load->view('component/footer');
     }
 
-    public function add()
+    public function rekammedis($id)
     {
-        $this->form_validation->set_rules('klinik', 'Klinik', 'required');
-        $this->form_validation->set_rules('kategori_pasien', 'Kategori Pasien', 'required');
-        $this->form_validation->set_rules('nama', 'Nama', 'required');
-        $this->form_validation->set_rules('alamat', 'Alamat', 'required');
-        $this->form_validation->set_rules('nohp', 'No Hp', 'required');
-        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
-        $this->form_validation->set_rules('tanggal_lahir', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('kategori_tindakan', 'Kategori Tindakan', 'required');
+        $this->form_validation->set_rules('tindakan', 'Tindakan', 'required');
+        $this->form_validation->set_rules('harga', 'Harga', 'required');
 
 		if ($this->form_validation->run() == TRUE) {
 			$data = array(
-				'id_klinik' => decrypt_url($this->input->post('klinik')),
-				'nama' => $this->input->post('nama'),
-				'kategori_pasien' => $this->input->post('kategori_pasien'),
-				'alamat' => $this->input->post('alamat'),
-				'nohp' => $this->input->post('nohp'),
-				'jenis_kelamin' => $this->input->post('jenis_kelamin'),
-				'tanggal_lahir' => $this->input->post('tanggal_lahir'),
+				'id_kategori_tindakan' => decrypt_url($this->input->post('kategori_tindakan')),
+				'id_tindakan' => $this->input->post('tindakan'),
+				'harga' => $this->input->post('harga'),
 			);
 
-			$this->Pasien_model->addPasien($data);
+			$this->Tambah_tindakan_model->addTindakan($data);
 			redirect('Pasien');
 		} else {
-			$this->data['selected_klinik'] = $this->input->post('klinik');
-			$this->data['nama'] = $this->input->post('nama');
-			$this->data['kategori_pasien'] = $this->input->post('kategori_pasien');
-			$this->data['alamat'] = $this->input->post('alamat');
-			$this->data['nohp'] = $this->input->post('nohp');
-			$this->data['jenis_kelamin'] = $this->input->post('jenis_kelamin');
-			$this->data['tanggal_lahir'] = $this->input->post('tanggal_lahir');
+			$this->data['selected_kategori_tindakan'] = $this->input->post('kategori_tindakan');
+			$this->data['selected_tindakan'] = $this->input->post('tindakan');
+			$this->data['harga'] = $this->input->post('harga');
 
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
-			$this->data['action'] = site_url('Pasien/add');
-			$this->data['url'] = site_url('Pasien');
-			$this->data['title'] = "Pasien";
+            $this->data['action'] = site_url('Pasien/rekammedis/' . $id);
+            $this->data['url'] = site_url('Pasien');
+            $this->data['title'] = "Rekam Medis";
+            
+            $this->data['title'] = 'Rekam Medis';
 
-			$this->data['breadcrumbs'] = [];
+            $this->data['breadcrumbs'] = [];
 
-			$this->data['breadcrumbs'][] = [
-				'active' => FALSE,
-				'text' => 'Pengaturan / ',
-				'class' => 'breadcrumb-item pe-3',
-				'href' => ''
-			];
+            $this->data['breadcrumbs'][] = [
+                'active' => FALSE,
+                'text' => 'Rekam Medis',
+                'class' => 'breadcrumb-item pe-3 text-gray-400',
+                'href' => site_url('Pasien')
+            ];
 
-			$this->data['breadcrumbs'][] = [
-				'active' => TRUE,
-				'text' => 'Pasien',
-				'class' => 'breadcrumb-item pe-3 text-gray-400',
-				'href' => site_url('Pasien')
-			];
-
-            $this->data['list_klinik'] = $this->Pasien_model->getAllKlinik();
-
-			$this->load->view('component/header', $this->data);
-			$this->load->view('component/sidebar', $this->data);
-			$this->load->view('component/navbar', $this->data);
-			$this->load->view('pasien/form', $this->data);
-			$this->load->view('component/footer', $this->data);
+            $pasien = $this->Pasien_model->getPasien($id);
+    
+            $this->data['name'] = $pasien->name;
+    
+            $this->data['list_kategori_tindakan'] = $this->Pasien_model->getAllKategori();
+            $this->data['list_tindakan'] = $this->Pasien_model->getAllTindakan();
+    
+            $this->load->view('component/header', $this->data);
+            $this->load->view('component/sidebar', $this->data);
+            $this->load->view('component/navbar', $this->data);
+            $this->load->view('pasien/rekammedis', $this->data);
+            $this->load->view('component/footer');
 		}
+
     }
 }

@@ -395,6 +395,3 @@ class Usersmanagement extends CI_Controller
 		return TRUE;
 	}
 }
-
-/* End of file auth.php */
-/* Location: ./application/controllers/auth.php */

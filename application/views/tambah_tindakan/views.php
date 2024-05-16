@@ -51,7 +51,7 @@
                                             <td class='text-center'><?php echo $no; ?></td>
                                             <td class='text-center'><?php echo $tindakan->kategori_tindakan; ?></td>
                                             <td class='text-center'><?php echo $tindakan->tindakan; ?></td>
-                                            <td class='text-center'><?php echo $tindakan->harga; ?></td>
+                                            <td class='text-center'><?php echo rupiah($tindakan->harga); ?></td>
                                             <td class='text-center'>
                                                 <div class="dropdown">
                                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

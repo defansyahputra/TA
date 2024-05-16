@@ -93,8 +93,8 @@
                                             <i class="bx bx-dots-vertical-rounded"></i>
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="<?php echo site_url('Usersmanagement/rekammedis/' . $pasien->id); ?>">
-                                            <i class="bx bx-edit-alt me-1"></i> Edit
+                                            <a class="dropdown-item" href="<?php echo site_url('Pasien/rekammedis/' . $pasien->id); ?>">
+                                            <i class="bx bx-edit-alt me-1"></i> Rekam Medis
                                             </a>
                                             <a class="dropdown-item" href="<?php echo site_url('Usersmanagement/delete/' . $pasien->id); ?>" onclick="return confirm('Are You Sure Want to Delete This Data?')">
                                             <i class="bx bx-trash me-1"></i> Delete
