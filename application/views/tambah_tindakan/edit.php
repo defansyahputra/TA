@@ -49,7 +49,7 @@
                   <div class="row mb-3">
                     <label class="col-sm-2 col-form-label" for="kategori_tindakan">Kategori Produk</label>
                     <div class="col-sm-10">
-                        <select name="kategori_tindakan" class="form-select" data-control="select2" data-placeholder="Pilih Kategori Produk . . .">
+                        <select id="kategori_tindakan" name="kategori_tindakan" class="form-select" data-control="select2" data-placeholder="Pilih Kategori Produk . . .">
                             <option value="">Pilih Kategori Produk</option>
                             <?php foreach ($list_kategori_tindakan as $kategori_tindakan) : ?>
                                 <option value="<?= encrypt_url($kategori_tindakan->id_kategori_tindakan); ?>" <?= ($kategori_tindakan->id_kategori_tindakan == $selected_kategori_tindakan) ? 'selected' : ''; ?>>
@@ -68,6 +68,7 @@
                           type="text" 
                           class="form-control" 
                           name="tindakan" 
+                          id="tindakan" 
                           autocomplete="off" 
                           value="<?php if (isset($tindakan)) echo $tindakan; ?>"
                         >
@@ -76,7 +77,7 @@
                     <div class="row mb-3">
                       <label class="col-sm-2 col-form-label" for="harga">Harga</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" name="harga" placeholder="Masukkan Tindakan Harga. . ." autocomplete="off" value="<?php if (isset($harga)) { echo $harga; } ?>">
+                        <input type="text" class="form-control" id="harga" name="harga" placeholder="Masukkan Tindakan Harga. . ." autocomplete="off" value="<?php if (isset($harga)) { echo $harga; } ?>">
                       </div>
                     </div>
                     <div class="row justify-content-end">

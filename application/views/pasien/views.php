@@ -62,7 +62,7 @@
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody id="pegawai" class="table-border-bottom-0">
+                                <tbody id="tablePasienBody" class="table-border-bottom-0">
                                 <?php 
                                     $no = 1;
                                     foreach ($listpasien->result() as $pasien) {
@@ -118,3 +118,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#selectKlinik').change(function() {
+            var idKlinik = $(this).val();
+            $.ajax({
+                url: "<?= site_url('Pasien/load_pasien_by_klinik'); ?>",
+                type: "POST", // Perubahan disini, dari 'method' menjadi 'type'
+                data: {id_klinik: idKlinik},
+                success: function(data) {
+                    $('#tablePasienBody').html(data);
+                }
+            });
+        });
+    });
+</script>

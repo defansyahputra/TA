@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2024 at 07:21 PM
+-- Generation Time: May 24, 2024 at 04:37 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -87,9 +87,9 @@ INSERT INTO `menu` (`id_menu`, `id_menu_parent`, `nama_menu`, `icon`, `kategori`
 (37, 0, 'Pengguna Web', 'bx bx-user', 'Controller', '', 'Y', '1'),
 (39, 0, 'Pegawai', 'bx bx-group', 'Controller', 'Pegawai', 'Y', '1'),
 (40, 0, 'Tindakan', 'bx bxs-hand', 'Controller', '', 'Y', '2'),
-(41, 40, 'Pengaturan Tindakan', '', 'Controller', 'Pengaturan_Tindakan', 'Y', '2'),
+(41, 40, 'Kategori Tindakan', '', 'Controller', 'Pengaturan_Tindakan', 'Y', '2'),
 (42, 40, 'Pengaturan Klinik', '', 'Controller', 'Pengaturan_Klinik', 'Y', '3'),
-(43, 40, 'Tambah Tindakan', '', 'Controller', 'Tambah_Tindakan', 'Y', '4'),
+(43, 40, 'Tindakan', '', 'Controller', 'Tambah_Tindakan', 'Y', '2'),
 (44, 0, 'Rekam Medis', 'bx bx-plus-medical', 'Controller', 'Rekam_Medis', 'Y', '1');
 
 -- --------------------------------------------------------
@@ -153,8 +153,8 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`role_id`, `role`, `full`, `default`) VALUES
-(1, 'Admin', 'Administrator', 0),
-(2, 'User', 'User', 1),
+(1, 'Dokter', 'Dokter', 0),
+(2, 'Pasien', 'Pasien', 1),
 (3, 'Sup Admin', 'Super Admin', 0);
 
 -- --------------------------------------------------------
@@ -203,6 +203,23 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tb_assesment`
+--
+
+CREATE TABLE `tb_assesment` (
+  `id_assesment` int(10) NOT NULL,
+  `id_users` int(10) NOT NULL,
+  `id_rekammedis` int(10) NOT NULL,
+  `id_kategori_tindakan` int(10) NOT NULL,
+  `id_tindakan` int(10) NOT NULL,
+  `gigi` int(10) NOT NULL,
+  `harga` varchar(128) NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tb_invoices`
 --
 
@@ -229,8 +246,12 @@ CREATE TABLE `tb_kategori_tindakan` (
 --
 
 INSERT INTO `tb_kategori_tindakan` (`id_kategori_tindakan`, `kategori_tindakan`) VALUES
-(2, 'Kontrol Gigi'),
-(7, 'Bersihin Karang');
+(2, 'Pencegahan'),
+(7, 'Perbaikan'),
+(8, 'Perawatan Gusi'),
+(9, 'Perawatan Akar Gigi'),
+(10, 'Perawatan Ortodontik'),
+(11, 'Estetika');
 
 -- --------------------------------------------------------
 
@@ -293,23 +314,24 @@ INSERT INTO `tb_pasien` (`id_pasien`, `id_klinik`, `kategori_pasien`, `nama`, `a
 --
 
 CREATE TABLE `tb_rekamedis` (
-  `id_rekamedis` int(11) NOT NULL,
-  `id_users` int(10) DEFAULT NULL,
-  `subjective` text DEFAULT NULL,
-  `objective` text DEFAULT NULL,
-  `assement` text DEFAULT NULL,
-  `plan` text DEFAULT NULL
+  `id_rekamedis` int(10) NOT NULL,
+  `id_pasien` int(10) NOT NULL,
+  `id_kategori_tindakan` int(10) NOT NULL,
+  `id_tindakan` int(10) NOT NULL,
+  `subject` text DEFAULT NULL,
+  `object` text DEFAULT NULL,
+  `plan` text DEFAULT NULL,
+  `gigi` varchar(128) NOT NULL,
+  `harga` varchar(128) NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tb_rekamedis`
 --
 
-INSERT INTO `tb_rekamedis` (`id_rekamedis`, `id_users`, `subjective`, `objective`, `assement`, `plan`) VALUES
-(1, 1, '1asdasdasd', 'asdasdasd', 'asdasda', 'asdasdas'),
-(2, 1, '2asdasdasdas', 'asdasdasda', 'asdasdasdas', 'asdasdasdas'),
-(3, 1, '3asdasdasd', 'asdasdasd', 'asdasda', 'asdasdas'),
-(4, 1, '4asdasdasdas', 'asdasdasda', 'asdasdasdas', 'asdasdasdas');
+INSERT INTO `tb_rekamedis` (`id_rekamedis`, `id_pasien`, `id_kategori_tindakan`, `id_tindakan`, `subject`, `object`, `plan`, `gigi`, `harga`, `date`) VALUES
+(1, 3, 7, 3, 'Wahh giginya perlu dicabut nihh', 'Wahh giginya perlu dicabut nihh', 'Wahh giginya perlu dicabut nihh', '20', '900000', '2024-05-23');
 
 -- --------------------------------------------------------
 
@@ -329,8 +351,20 @@ CREATE TABLE `tb_tindakan` (
 --
 
 INSERT INTO `tb_tindakan` (`id_tindakan`, `id_kategori_tindakan`, `tindakan`, `harga`) VALUES
-(10, 2, 'adadadasd', '213123123'),
-(11, 7, 'tes', '20000000');
+(1, 2, 'Pemeriksaan Rutin', '700000'),
+(2, 2, 'Pembersihan Gigi', '900000'),
+(3, 7, 'Penambalan Gigi', '1200000'),
+(4, 7, 'Mahkota', '1000000'),
+(5, 7, 'Bridges', '1500000'),
+(6, 7, 'Implan', '2000000'),
+(7, 7, 'Dentures', '3000000'),
+(8, 8, 'Scaling dan Root Planing', '600000'),
+(9, 8, 'Perawatan Periodontal Lanjutan', '1400000'),
+(10, 9, 'Pengobatan Saluran Akar', '2500000'),
+(11, 10, 'Pemasangan Kawat Gigi', '5000000'),
+(12, 10, 'Pemakaian Alat Ortodontik Lainnya', '3000000'),
+(13, 11, 'Pemutihan Gigi', '1500000'),
+(14, 11, 'Veneer', '700000');
 
 -- --------------------------------------------------------
 
@@ -370,9 +404,12 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `id_klinik`, `kategori_pasien`, `username`, `password`, `email`, `nohp`, `tanggal_lahir`, `jenis_kelamin`, `alamat`, `activated`, `banned`, `ban_reason`, `new_password_key`, `new_password_requested`, `new_email`, `new_email_key`, `approved`, `meta`, `last_ip`, `last_login`, `created`, `modified`) VALUES
 (1, 0, '', 'admin', '$2a$10$gtANPNMiG2UEL9fPbbJaBOKY1juVGP8PhYCKJWuV6yYIuz29qJF7W', 'defansyahputra@gmail.com', '', NULL, '', '', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"62c4714b325a0\";s:4:\"name\";s:11:\"Raihan Arif\";}', '::1', '2024-03-08 11:36:07', '2022-07-05 19:13:47', '2024-03-15 06:13:34'),
-(2, 0, '', 'sup_admin', '$2a$10$.45q.HlDPIiFaaILIMJfHe7YXmqSKqB8AtZXlplDZgWLqTeBszIzu', 'khuzen.ard@gmail.com', '', NULL, '', '', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"65d085a3965ff\";s:4:\"name\";s:20:\"Khuzainil Ardiansyah\";}', '::1', '2024-05-16 14:59:28', '2024-02-17 11:08:35', '2024-05-16 12:59:28'),
-(12, 1, 'Umum', 'Pasien1', '$2a$10$9FIs9mRl5jZ.Fah6.adPUe/fEQ/aoQ2rExy5la.M2bptAz7gScVdC', 'Pasien1@gmail.com', '12345678', '2024-05-01', 'P', 'Pasien1', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"6644d8ea7b209\";s:4:\"name\";s:8:\"Pasien 1\";}', '::1', '0000-00-00 00:00:00', '2024-05-15 17:46:50', '2024-05-15 15:46:50'),
-(13, 1, 'Orthodentist', 'Pasien2', '$2a$10$WgXfXr/Lt0JHYhgtFh0HWOMHgRSsVBJ/D6SAf4iy/.ymVcaM4GNuq', 'Pasien2@gmail.com', '98765432', '2024-05-02', 'W', 'Pasien2', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"6644d92f40647\";s:4:\"name\";s:8:\"Pasien 2\";}', '::1', '0000-00-00 00:00:00', '2024-05-15 17:47:59', '2024-05-15 15:47:59');
+(2, 0, '', 'sup_admin', '$2a$10$.45q.HlDPIiFaaILIMJfHe7YXmqSKqB8AtZXlplDZgWLqTeBszIzu', 'khuzen.ard@gmail.com', '', NULL, '', '', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"65d085a3965ff\";s:4:\"name\";s:20:\"Khuzainil Ardiansyah\";}', '::1', '2024-05-24 04:09:08', '2024-02-17 11:08:35', '2024-05-24 02:09:08'),
+(3, 1, 'Umum', 'JohnDoe', '$2a$10$EdqClq.6p6WLn28DWn.s/ORI7z1bq4L257o0GVzqO79ANNpAbC/1W', 'JohnDoe@gmail.com', '6281234567890', '1999-05-15', 'P', '123 Main Street, Anytown', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"664f4878f33b7\";s:4:\"name\";s:8:\"John Doe\";}', '::1', '0000-00-00 00:00:00', '2024-05-23 15:45:29', '2024-05-23 13:45:29'),
+(4, 1, 'Orthodentist', 'JaneSmith', '$2a$10$6p8aYKt9SKw8Oh6S.W8zOe9GswxPrLljEePzELDqIWCN0kFZBGtVi', 'JaneSmith@gmail.com', '6282345678901', '1985-10-25', 'W', '456 Oak Avenue, Somewhereville', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"664f48b4d9723\";s:4:\"name\";s:10:\"Jane Smith\";}', '::1', '0000-00-00 00:00:00', '2024-05-23 15:46:28', '2024-05-23 13:46:28'),
+(5, 2, 'Umum', 'AhmadRahman', '$2a$10$KvFX4NUmjTVHn4I5pbdZMesrE0ij5Afecu2.NEio4ZUGsoEUh7i5S', 'AhmadRahman@gmail.com', '6283456789012', '1995-02-08', 'P', '789 Elm Road, Elsewhere City', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"664f4903327d6\";s:4:\"name\";s:12:\"Ahmad Rahman\";}', '::1', '0000-00-00 00:00:00', '2024-05-23 15:47:47', '2024-05-23 13:47:47'),
+(6, 2, 'Orthodentist', 'MariaGarcia', '$2a$10$S13cTpWdwoNk75x.w5Rk8OmhZB71HkCsSvotJkzc0BoSBxnfaPeJS', 'MariaGarcia@gmail.com', '6284567890123', '1988-12-30', 'W', '321 Pine Boulevard, Nowhere Town', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"664f4944c8a3f\";s:4:\"name\";s:12:\"Maria Garcia\";}', '::1', '0000-00-00 00:00:00', '2024-05-23 15:48:52', '2024-05-23 13:48:52'),
+(7, 3, 'Umum', 'ChenWei', '$2a$10$V06Mp9ghHCawofS9LkOY8ucjKIB1fZ4lwHFt/2CV0IOfcyz/fEnVO', 'ChenWei@gmail.com', '6285678901234', '1992-07-18', 'P', '654 Cedar Lane, Anyplace', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"664f49838fcf5\";s:4:\"name\";s:8:\"Chen Wei\";}', '::1', '0000-00-00 00:00:00', '2024-05-23 15:49:55', '2024-05-23 13:49:55');
 
 -- --------------------------------------------------------
 
@@ -415,8 +452,11 @@ CREATE TABLE `user_profiles` (
 INSERT INTO `user_profiles` (`id`, `name`, `foto`, `modified`) VALUES
 (1, 'Defan Syahputra', '62c4714b325a0', '2024-03-15 08:25:53'),
 (2, 'Hari dhova', '65d085a3965ff', '2024-03-15 08:26:04'),
-(12, 'Pasien 1', '6644d8ea7b209', '2024-05-15 15:46:50'),
-(13, 'Pasien 2', '6644d92f40647', '2024-05-15 15:47:59');
+(3, 'John Doe', '664f4878f33b7', '2024-05-23 13:45:29'),
+(4, 'Jane Smith', '664f48b4d9723', '2024-05-23 13:46:29'),
+(5, 'Ahmad Rahman', '664f4903327d6', '2024-05-23 13:47:47'),
+(6, 'Maria Garcia', '664f4944c8a3f', '2024-05-23 13:48:52'),
+(7, 'Chen Wei', '664f49838fcf5', '2024-05-23 13:49:55');
 
 -- --------------------------------------------------------
 
@@ -436,8 +476,11 @@ CREATE TABLE `user_roles` (
 INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
 (1, 1),
 (2, 3),
-(12, 2),
-(13, 2);
+(3, 2),
+(4, 2),
+(5, 2),
+(6, 2),
+(7, 2);
 
 -- --------------------------------------------------------
 
@@ -495,6 +538,12 @@ ALTER TABLE `permissions`
 --
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`role_id`);
+
+--
+-- Indexes for table `tb_assesment`
+--
+ALTER TABLE `tb_assesment`
+  ADD PRIMARY KEY (`id_assesment`);
 
 --
 -- Indexes for table `tb_invoices`
@@ -580,6 +629,12 @@ ALTER TABLE `roles`
   MODIFY `role_id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `tb_assesment`
+--
+ALTER TABLE `tb_assesment`
+  MODIFY `id_assesment` int(10) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tb_invoices`
 --
 ALTER TABLE `tb_invoices`
@@ -589,7 +644,7 @@ ALTER TABLE `tb_invoices`
 -- AUTO_INCREMENT for table `tb_kategori_tindakan`
 --
 ALTER TABLE `tb_kategori_tindakan`
-  MODIFY `id_kategori_tindakan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_kategori_tindakan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `tb_klinik`
@@ -607,31 +662,31 @@ ALTER TABLE `tb_pasien`
 -- AUTO_INCREMENT for table `tb_rekamedis`
 --
 ALTER TABLE `tb_rekamedis`
-  MODIFY `id_rekamedis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_rekamedis` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tb_tindakan`
 --
 ALTER TABLE `tb_tindakan`
-  MODIFY `id_tindakan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_tindakan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `user_profiles`
 --
 ALTER TABLE `user_profiles`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables

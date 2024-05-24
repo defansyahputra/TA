@@ -45,6 +45,7 @@ class Rekam_Medis extends CI_Controller
 			$this->data['openMenu'] = $this->Showmenu_model->getDataOpenMenu($OpenShowMenu->id_menu_parent);
 
 			$this->load->model("Menu_model");
+			$this->load->model("Pasien_model");
 		}
 	}
  
@@ -61,6 +62,8 @@ class Rekam_Medis extends CI_Controller
 			'href' => site_url('Rekam_Medis')
 		];
 
+		$this->data['list_kategori_tindakan'] = $this->Pasien_model->getAllKategori();
+        $this->data['list_tindakan'] = $this->Pasien_model->getAllTindakan();
 
 		$this->load->view('component/header', $this->data);
 		$this->load->view('component/sidebar', $this->data);
@@ -68,4 +71,19 @@ class Rekam_Medis extends CI_Controller
 		$this->load->view('rekam_medis/views', $this->data);
 		$this->load->view('component/footer', $this->data);
 	}
+
+	public function get_tindakan()
+    {
+        $getTindakan = $this->Pasien_model->getDetailTindakan(decrypt_url($this->input->post('id_kategori_tindakan')));
+
+        $tindakan_arr = array();
+        foreach ($getTindakan as $tindakan) {
+            $id_tindakan = $tindakan->id_tindakan;
+            $tindakan = $tindakan->tindakan;
+
+            $tindakan_arr[] = array("id_tindakan" => encrypt_url($id_tindakan), "tindakan" => $tindakan);
+        }
+
+        echo json_encode($tindakan_arr);
+    }
 }

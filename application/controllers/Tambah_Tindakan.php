@@ -137,12 +137,13 @@ class Tambah_Tindakan extends CI_Controller
 				'harga' => $this->input->post('harga')
 			);
 
-			$result = $this->Tambah_tindakan_model->EditTindakan(($id_tindakan), $data);
+			$result = $this->Tambah_tindakan_model->EditTindakan($id_tindakan, $data); 
+			redirect('Tambah_Tindakan');
 
 			if ($result) {
 				$this->session->set_flashdata('msg', 'Anda berhasil menyunting data produk');
 
-				redirect('Tambah_Tindakan');
+				// redirect('Tambah_Tindakan');
 			}
 		} else {
 			$this->data['selected_kategori_tindakan'] = $this->input->post('kategori_tindakan');
@@ -161,7 +162,7 @@ class Tambah_Tindakan extends CI_Controller
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 			$this->data['action'] = site_url('Tambah_Tindakan/edit/' . $id_tindakan);
 			$this->data['url'] = site_url('Tambah_Tindakan');
-			$this->data['title'] = "tindakan";
+			$this->data['title'] = "Tambah Tindakan";
 
 			$this->data['breadcrumbs'] = [];
 

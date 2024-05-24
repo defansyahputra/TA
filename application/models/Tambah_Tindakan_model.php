@@ -35,10 +35,10 @@ class Tambah_tindakan_model extends CI_Model
 		$this->db->delete('tb_tindakan');
 	}
 
-	public function EditTindakan($data, $condition)
+	public function EditTindakan($id_tindakan, $data)
 	{
-		$this->db->where($condition);
-		$this->db->update('tb_tindakan', $data);
+		$this->db->where('id_tindakan', $id_tindakan);
+		$query = $this->db->update('tb_tindakan', $data); 
 	}
 
 	function getAllKategoriTindakan()

@@ -16,9 +16,9 @@ class Pasien_model extends CI_Model
 		return $this->db->get();
     }
 
-    function getPasien($id)
+    function getPasien($id_pasien)
     {
-      $this->db->where('users.id', $id);
+      $this->db->where('users.id', $id_pasien);
       $this->db->select("*");
       $this->db->from("users");
       $this->db->join('user_profiles', 'users.id = user_profiles.id', 'left');
@@ -47,8 +47,30 @@ class Pasien_model extends CI_Model
 
     function getAllTindakan()
     {
-      $this->db->from('tb_tindakan');
+      $this->db->from('view_tindakan');
       $query = $this->db->get();
+
+      return $query->result();
+    }
+
+    function getDetailTindakan($id_kategori_tindakan)
+    {
+      $this->db->where('id_kategori_tindakan', $id_kategori_tindakan);
+      $this->db->from('view_tindakan');
+      $query = $this->db->get();
+
+      return $query->result(); 
+    }
+
+    public function addRekammedis($data)
+    {
+      $this->db->insert('tb_rekamedis', $data);
+    }
+
+    public function getPasienByKlinik($id_klinik)
+    {
+      $this->db->where('id_klinik', $id_klinik);
+      $query = $this->db->get('users');
 
       return $query->result();
     }

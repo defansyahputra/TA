@@ -48,15 +48,15 @@
                         <div class="row mb-3">
                           <label class="col-sm-2 col-form-label" for="kategori_tindakan">Nama Kategori</label>
                           <div class="col-sm-10">
-						  <input 
-						  type="text" 
-						  class="form-control" 
-						  name="kategori_tindakan" 
-						  placeholder="Masukkan Kategori Tindakan . . ." 
-						  autocomplete="off" 
-						  value="<?php if (isset($kategori_tindakan)) {
-							echo $kategori_tindakan;
-								} ?>">
+                            <input 
+                            type="text" 
+                            class="form-control" 
+                            name="kategori_tindakan" 
+                            placeholder="Masukkan Kategori Tindakan . . ." 
+                            autocomplete="off" 
+                            value="<?php if (isset($kategori_tindakan)) {
+                            echo $kategori_tindakan;
+                              } ?>">
                           </div>
                         </div>
                         <div class="row justify-content-end">
