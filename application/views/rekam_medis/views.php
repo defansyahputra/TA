@@ -1,144 +1,151 @@
-<!-- Layout wrapper -->
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
-        <!-- Layout container -->
         <div class="layout-page">
-            <!-- Content wrapper -->
             <div class="content-wrapper">
-                <!-- Content -->
                 <div class="container-xxl flex-grow-1 container-p-y">
                     <h6 class="mb-2">
                         <?php foreach ($breadcrumbs as $breadcrumb) { ?>
                             <span class="<?php echo $breadcrumb['class']; ?>">
-                                <?php echo ($breadcrumb['active'] == TRUE) ? '<a href="' . $breadcrumb['href'] . '" class="pe-3 text-grey-300">' : NULL; ?>
-                                <?php echo $breadcrumb['text']; ?>
-                                <?php echo ($breadcrumb['active'] == TRUE) ? '</a>' : NULL; ?>
+                                <?php if ($breadcrumb['active']) { ?>
+                                    <a href="<?= $breadcrumb['href']; ?>" class="pe-3 text-grey-300">
+                                <?php } ?>
+                                    <?= $breadcrumb['text']; ?>
+                                <?php if ($breadcrumb['active']) { ?>
+                                    </a>
+                                <?php } ?>
                             </span>
                         <?php } ?>
                     </h6>
                     <div class="row">
-                        <!-- Hoverable Table rows -->
                         <div class="card pb-3 px-4">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h4 class="card-header fw-bold px-1 pt-3 pb-3">Rekam Medis</h4>
-                                <button type="button" id="addAssesment" name="addAssesment" class="btn btn-primary"><i class='bx bx-plus'></i></button>
+                                <h4 class="card-header fw-bold px-1 pt-3 pb-3">List Pasien</h4>
                             </div>
-                            <div id="dynamic_field">
-                                <!-- Input fields will be dynamically added here -->
-                            </div>
-                            <div>
-                                <form class="form-horizontal" role="form" action="#" method="POST">
-                                <div class="row mb-3">
-                                        <label class="col-sm-2 col-form-label">Kategori Tindakan</label>
-                                        <div class="col-sm-10">
-                                            <select name="kategori_tindakan" class="form-select kategori-tindakan" data-placeholder="Pilih Kategori tindakan . . .">
-                                                <option value="">Pilih Kategori tindakan</option>
-                                                <?php foreach ($list_kategori_tindakan as $kategori_tindakan) { ?>
-                                                    <?php if ($kategori_tindakan->id_kategori_tindakan == $selected_kategori_tindakan) { ?>
-                                                        <option value="<?php echo encrypt_url($kategori_tindakan->id_kategori_tindakan); ?>" selected><?php echo $kategori_tindakan->kategori_tindakan; ?></option>
-                                                    <?php } else { ?>
-                                                        <option value="<?php echo encrypt_url($kategori_tindakan->id_kategori_tindakan); ?>"><?php echo $kategori_tindakan->kategori_tindakan; ?></option>
-                                                    <?php } ?>
-                                                <?php } ?>
-                                            </select>
-                                            <span style="color: red;"><?= form_error('kategori_tindakan'); ?></span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label class="col-sm-2 col-form-label">Tindakan</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-select select-tindakan" data-placeholder="Pilih Tindakan..." name="tindakan">
-                                            </select>
-                                            <div class="text-danger"><?php echo form_error('tindakan'); ?></div>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label class="col-sm-2 col-form-label">Harga</label>
-                                        <div class="col-sm-10">
-                                            <input class="form-control" name="harga" id="harga">
-                                        </div>
-                                    </div>
-                                    <div class="row justify-content-end">
-                                        <div class="col-sm-10">
-                                            <button type="submit" class="btn btn-primary">
-                                                <i class='bx bx-save'></i>&nbsp;Simpan
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
+                            <div class="table-responsive text-nowrap">
+                                <div class="mb-3 col-sm-2">
+                                    <select id="selectKlinik" class="form-select">
+                                        <option value="">Pilih Klinik</option>
+                                        <?php foreach ($list_klinik as $klinik): ?>
+                                            <option value="<?= $klinik->id_klinik; ?>"><?= $klinik->klinik; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <table id="pegawai" class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No</th>
+                                            <th class="text-center">Nama</th>
+                                            <th class="text-center">Kategori Pasien</th>
+                                            <th class="text-center">Alamat</th>
+                                            <th class="text-center">NO.HP</th>
+                                            <th class="text-center">Jenis Kelamin</th>
+                                            <th class="text-center">Tanggal Lahir</th>
+                                            <th class="text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-border-bottom-0" id="pasien-table-body">
+                                        <?php 
+                                        $no = 1;
+                                        foreach ($list_pasien->result() as $pasien) { 
+                                            $this->db->select('roles.role');
+                                            $this->db->from('users');
+                                            $this->db->join('user_roles', 'user_roles.user_id = users.id');
+                                            $this->db->join('roles', 'roles.role_id = user_roles.role_id');
+                                            $this->db->where('users.id', $pasien->id);
+                                            $this->db->where('user_roles.role_id', 2);
+                                            $role_query = $this->db->get();
+
+                                            if ($role_query->num_rows() > 0) {
+                                                $role_row = $role_query->row();
+                                                $role = $role_row->role;
+                                                ?>
+                                                <tr>
+                                                    <td class="text-center"><?= $no; ?></td>
+                                                    <td class="text-center"><?= $pasien->username; ?></td>
+                                                    <td class="text-center"><?= $pasien->kategori_pasien; ?></td>
+                                                    <td class="text-center"><?= $pasien->alamat; ?></td>
+                                                    <td class="text-center"><?= $pasien->nohp; ?></td>
+                                                    <td class="text-center"><?= $pasien->jenis_kelamin; ?></td>
+                                                    <td class="text-center"><?= $pasien->tanggal_lahir; ?></td>
+                                                    <td class="text-center">
+                                                        <div class="dropdown">
+                                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                                <i class="bx bx-dots-vertical-rounded"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <a class="dropdown-item" href="<?= site_url('Pasien/rekammedis/' . $pasien->id); ?>">
+                                                                    <i class="bx bx-edit-alt me-1"></i> Rekam Medis
+                                                                </a>
+                                                                <a class="dropdown-item" href="<?= site_url('Usersmanagement/delete/' . $pasien->id); ?>" onclick="return confirm('Are You Sure Want to Delete This Data?')">
+                                                                    <i class="bx bx-trash me-1"></i> Delete
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <?php 
+                                                $no++;
+                                            }
+                                        } ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- / Content -->
             </div>
         </div>
-    </div> 
+    </div>
 </div>
 
 <script>
-    $(document).ready(function(){
-        var i = 0;
-
-        $('#addAssesment').click(function(){
-            i++;
-            var newRow = 
-                '<div id="row'+i+'" class="row mb-3">' +
-                    '<label class="col-sm-2 col-form-label">Kategori Tindakan</label>' +
-                    '<div class="col-sm-10">' +
-                        '<select name="kategori_tindakan[]" class="form-select kategori-tindakan" data-placeholder="Pilih Kategori tindakan . . .">' +
-                            '<option value="">Pilih Kategori tindakan</option>' +
-                        '</select>' +
-                        '<span style="color: red;"></span>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="row mb-3">' +
-                    '<label class="col-sm-2 col-form-label">Tindakan</label>' +
-                    '<div class="col-sm-10">' +
-                        '<select class="form-select select-tindakan" data-placeholder="Pilih Tindakan..." name="tindakan_'+i+'[]">' +
-                            '<option value="">Pilih Tindakan</option>' +
-                        '</select>' +
-                        '<div class="text-danger"></div>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="row mb-3">' +
-                    '<label class="col-sm-2 col-form-label">Harga</label>' +
-                    '<div class="col-sm-10">' +
-                        '<input class="form-control" name="harga_'+i+'" id="harga_'+i+'">' +
-                    '</div>' +
-                '</div>' +
-                '<hr>';
-            
-            $('#dynamic_field').append(newRow);
-            
-            // Bind change event to the newly added select elements
-            $('.kategori-tindakan').last().change(function () {
-                var id_kategori_tindakan = $(this).val();
-                var selectTindakan = $(this).closest('.row').next().find('.select-tindakan');
-
+    $(document).ready(function() {
+        $('#selectKlinik').change(function() {
+            var id_klinik = $(this).val();
+            if (id_klinik) {
                 $.ajax({
-                    url: "<?php echo site_url('Pasien/get_tindakan'); ?>",
-                    type: 'post',
-                    data: {
-                        id_kategori_tindakan: id_kategori_tindakan
-                    },
+                    url: '<?= site_url('Rekam_Medis/getPasienByKlinik') ?>',
+                    type: 'POST',
+                    data: {id_klinik: id_klinik},
                     dataType: 'json',
-                    success: function (response) {
-                        var len = response.length;
-
-                        var option = '<option value="">Pilih Tindakan</option>';
-                        for (var i = 0; i < len; i++) {
-                            var id_tindakan = response[i]['id_tindakan'];
-                            var tindakan = response[i]['tindakan'];
-
-                            option += "<option value='" + id_tindakan + "'>" + tindakan + "</option>";
+                    success: function(data) {
+                        var tableBody = $('#pasien-table-body');
+                        tableBody.empty();
+                        if (data.length > 0) {
+                            $.each(data, function(index, pasien) {
+                                tableBody.append('<tr>' +
+                                    '<td class="text-center">' + (index + 1) + '</td>' +
+                                    '<td class="text-center">' + pasien.username + '</td>' +
+                                    '<td class="text-center">' + pasien.kategori_pasien + '</td>' +
+                                    '<td class="text-center">' + pasien.alamat + '</td>' +
+                                    '<td class="text-center">' + pasien.nohp + '</td>' +
+                                    '<td class="text-center">' + pasien.jenis_kelamin + '</td>' +
+                                    '<td class="text-center">' + pasien.tanggal_lahir + '</td>' +
+                                    '<td class="text-center">' +
+                                        '<div class="dropdown">' +
+                                            '<button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">' +
+                                                '<i class="bx bx-dots-vertical-rounded"></i>' +
+                                            '</button>' +
+                                            '<div class="dropdown-menu">' +
+                                                '<a class="dropdown-item" href="<?= site_url('Pasien/rekammedis/') ?>' + pasien.id + '">' +
+                                                    '<i class="bx bx-edit-alt me-1"></i> Rekam Medis' +
+                                                '</a>' +
+                                                '<a class="dropdown-item" href="<?= site_url('Usersmanagement/delete/') ?>' + pasien.id + '" onclick="return confirm(\'Are You Sure Want to Delete This Data?\')">' +
+                                                    '<i class="bx bx-trash me-1"></i> Delete' +
+                                                '</a>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</td>' +
+                                '</tr>');
+                            });
+                        } else {
+                            tableBody.append('<tr><td colspan="8" class="text-center">No data available</td></tr>');
                         }
-
-                        selectTindakan.html(option);
-                        selectTindakan.trigger('change');
                     }
                 });
-            });
+            } else {
+                $('#pasien-table-body').empty();
+            }
         });
     });
 </script>

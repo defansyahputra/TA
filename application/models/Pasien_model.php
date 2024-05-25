@@ -67,11 +67,11 @@ class Pasien_model extends CI_Model
       $this->db->insert('tb_rekamedis', $data);
     }
 
-    public function getPasienByKlinik($id_klinik)
+    function getPasienByKlinik($id_klinik)
     {
-      $this->db->where('id_klinik', $id_klinik);
-      $query = $this->db->get('users');
-
-      return $query->result();
+        $this->db->select("*, users.id as id_user");
+        $this->db->from("users");
+        $this->db->where('id_klinik', $id_klinik);
+        return $this->db->get()->result();
     }
 }

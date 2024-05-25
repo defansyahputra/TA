@@ -64,7 +64,7 @@ class Pasien extends CI_Controller
         ];
 
         $this->data['list_klinik'] = $this->Pasien_model->getAllKlinik();
-        $this->data['listpasien'] = $this->Pasien_model->getAllPasien();
+        $this->data['list_pasien'] = $this->Pasien_model->getAllPasien();
 
         $this->load->view('component/header', $this->data);
         $this->load->view('component/sidebar', $this->data);
@@ -79,19 +79,20 @@ class Pasien extends CI_Controller
         $this->form_validation->set_rules('subject', 'Subject', 'required');
         $this->form_validation->set_rules('object', 'Object', 'required');
         $this->form_validation->set_rules('plan', 'Plan', 'required');
-        $this->form_validation->set_rules('kategori_tindakan', 'Kategori Tindakan', 'required');
-        $this->form_validation->set_rules('tindakan', 'Tindakan', 'required');
-        $this->form_validation->set_rules('gigi', 'Gigi', 'required');
-        $this->form_validation->set_rules('harga', 'Harga', 'required');
+        $this->form_validation->set_rules('kategori_tindakan[]', 'Kategori Tindakan', 'required');
+        $this->form_validation->set_rules('tindakan[]', 'Tindakan', 'required');
+        $this->form_validation->set_rules('gigi[]', 'Gigi', 'required');
+        $this->form_validation->set_rules('harga[]', 'Harga', 'required');
 
 		if ($this->form_validation->run() == TRUE) {
 			$data = array(
 				'id_pasien' => decrypt_url($this->input->post('name')),
-				'id_kategori_tindakan' => decrypt_url($this->input->post('kategori_tindakan')),
-				'id_tindakan' => decrypt_url($this->input->post('tindakan')),
 				'subject' => $this->input->post('subject'),
 				'object' => $this->input->post('object'),
 				'plan' => $this->input->post('plan'),
+				'id_assesment' => $this->input->post('id_assesment'),
+				'id_kategori_tindakan' => $this->input->post('kategori_tindakan'),
+				'id_tindakan' => $this->input->post('tindakan'),
 				'gigi' => $this->input->post('gigi'),
 				'harga' => $this->input->post('harga'),
 			);
@@ -99,14 +100,25 @@ class Pasien extends CI_Controller
 			$this->Pasien_model->addRekammedis($data);
 			redirect('Pasien');
 		} else {
-			$this->data['selected_kategori_tindakan'] = $this->input->post('kategori_tindakan');
-			$this->data['selected_tindakan'] = $this->input->post('tindakan');
 			$this->data['name'] = $this->input->post('id_pasien');
 			$this->data['subject'] = $this->input->post('subject');
 			$this->data['object'] = $this->input->post('object');
 			$this->data['plan'] = $this->input->post('plan');
+			$this->data['id_assesment'] = $this->input->post('id_assesment');
+			$this->data['selected_kategori_tindakan'] = $this->input->post('kategori_tindakan');
+			$this->data['selected_tindakan'] = $this->input->post('tindakan');
 			$this->data['gigi'] = $this->input->post('gigi');
 			$this->data['harga'] = $this->input->post('harga');
+
+            print_r($this->data['subject']);
+            print_r($this->data['object']);
+            print_r($this->data['plan']);
+            print_r($this->data['id_assesment']);
+            print_r($this->data['selected_kategori_tindakan']);
+            print_r($this->data['selected_tindakan']);
+            print_r($this->data['gigi'][1]);
+            print_r($this->data['harga']);
+            die;
 
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
             $this->data['action'] = site_url('Pasien/rekammedis/' . $id_pasien);
@@ -123,11 +135,6 @@ class Pasien extends CI_Controller
                 'class' => 'breadcrumb-item pe-3 text-gray-400',
                 'href' => site_url('Pasien')
             ];
-
-            // $pasien = $this->Pasien_model->getPasien($id_pasien);
-    
-            // $this->data['name'] = $pasien->name;
-            // $this->data['id'] = $pasien->id;
     
             $this->data['list_kategori_tindakan'] = $this->Pasien_model->getAllKategori();
             $this->data['list_tindakan'] = $this->Pasien_model->getAllTindakan();
@@ -156,13 +163,14 @@ class Pasien extends CI_Controller
         echo json_encode($tindakan_arr);
     }
 
-    public function load_pasien_by_klinik()
+    public function getPasienByKlinik()
     {
         $id_klinik = $this->input->post('id_klinik');
-        $this->data['list_pasien'] = $this->Pasien_model->getPasienByKlinik($id_klinik);
-
-        $this->load->view('component/header', $this->data);
-        $this->load->view('pasien/data_pasien', $this->data);
-        $this->load->view('component/footer', $this->data);
+        if ($id_klinik) {
+            $patients = $this->Pasien_model->getPasienByKlinik($id_klinik);
+            echo json_encode($patients);
+        } else {
+            echo json_encode([]);
+        }
     }
 }
