@@ -85,42 +85,46 @@ class Pasien extends CI_Controller
         $this->form_validation->set_rules('harga[]', 'Harga', 'required');
 
 		if ($this->form_validation->run() == TRUE) {
-			$data = array(
-				'id_pasien' => decrypt_url($this->input->post('name')),
-				'subject' => $this->input->post('subject'),
-				'object' => $this->input->post('object'),
-				'plan' => $this->input->post('plan'),
-				'id_assesment' => $this->input->post('id_assesment'),
-				'id_kategori_tindakan' => $this->input->post('kategori_tindakan'),
-				'id_tindakan' => $this->input->post('tindakan'),
-				'gigi' => $this->input->post('gigi'),
-				'harga' => $this->input->post('harga'),
-			);
+            $id_pasien_decrypted = decrypt_url($this->input->post('name'));
+            $subject = $this->input->post('subject');
+            $object = $this->input->post('object');
+            $plan = $this->input->post('plan');
 
-			$this->Pasien_model->addRekammedis($data);
-			redirect('Pasien');
-		} else {
-			$this->data['name'] = $this->input->post('id_pasien');
-			$this->data['subject'] = $this->input->post('subject');
-			$this->data['object'] = $this->input->post('object');
-			$this->data['plan'] = $this->input->post('plan');
-			$this->data['id_assesment'] = $this->input->post('id_assesment');
-			$this->data['selected_kategori_tindakan'] = $this->input->post('kategori_tindakan');
-			$this->data['selected_tindakan'] = $this->input->post('tindakan');
-			$this->data['gigi'] = $this->input->post('gigi');
-			$this->data['harga'] = $this->input->post('harga');
+            $kategori_tindakan = $this->input->post('kategori_tindakan');
+            $tindakan = $this->input->post('tindakan');
+            $gigi = $this->input->post('gigi');
+            $harga = $this->input->post('harga');
 
-            print_r($this->data['subject']);
-            print_r($this->data['object']);
-            print_r($this->data['plan']);
-            print_r($this->data['id_assesment']);
-            print_r($this->data['selected_kategori_tindakan']);
-            print_r($this->data['selected_tindakan']);
-            print_r($this->data['gigi'][1]);
-            print_r($this->data['harga']);
-            die;
+            $data_to_insert = [];
 
-			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+            for ($key = 1; $key <= count($kategori_tindakan); $key++) {
+                $data_to_insert[] = [
+                    'id_pasien' => $id_pasien_decrypted,
+                    'subject' => $subject,
+                    'object' => $object,
+                    'plan' => $plan,
+                    'id_kategori_tindakan' => $kategori_tindakan[$key],
+                    'id_tindakan' => $tindakan[$key],
+                    'gigi' => $gigi[$key],
+                    'harga' => $harga[$key]
+                ];
+            }
+
+            $this->Pasien_model->addRekammedis($data_to_insert);
+
+            redirect('Pasien');
+        } else {
+            $this->data['name'] = $this->input->post('id_pasien');
+            $this->data['subject'] = $this->input->post('subject');
+            $this->data['object'] = $this->input->post('object');
+            $this->data['plan'] = $this->input->post('plan');
+            $this->data['selected_kategori_tindakan'] = $this->input->post('kategori_tindakan');
+            $this->data['selected_tindakan'] = $this->input->post('tindakan');
+            $this->data['gigi'] = $this->input->post('gigi');
+            $this->data['harga'] = $this->input->post('harga');
+
+
+            $this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
             $this->data['action'] = site_url('Pasien/rekammedis/' . $id_pasien);
             $this->data['url'] = site_url('Pasien');
             $this->data['title'] = "Rekam Medis";
@@ -172,5 +176,28 @@ class Pasien extends CI_Controller
         } else {
             echo json_encode([]);
         }
+    }
+
+    public function detail($id_pasien)
+    {
+        $this->data['title'] = 'Detail Rekammedis';
+
+		$this->data['breadcrumbs'] = [];
+
+		$this->data['breadcrumbs'][] = [
+			'active' => FALSE,
+			'text' => 'Detail Rekam Medis',
+			'class' => 'breadcrumb-item pe-3 text-gray-400',
+			'href' => site_url('Pasien')
+		];
+
+        $rekam_medis = $this->Pasien_model->getDetailRekammedis($id_pasien);
+        $this->data['rekam_medis'] = $rekam_medis;
+
+		$this->load->view('component/header', $this->data);
+		$this->load->view('component/sidebar', $this->data);
+		$this->load->view('component/navbar', $this->data);
+		$this->load->view('pasien/detail', $this->data);
+		$this->load->view('component/footer', $this->data);
     }
 }

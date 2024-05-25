@@ -130,7 +130,7 @@
         fieldSet.innerHTML = `
         <div class="row mb-3">
           <div class="col-sm-4">
-            <input type="hidden" name="id_assesment[${fieldCounter}]" class="form-control" value="${fieldCounter}">
+            <input type="hidden" name="id_assesment" class="form-control" value="${fieldCounter}">
           </div>
         </div>
         <div class="row mb-3">
