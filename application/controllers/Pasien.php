@@ -47,6 +47,7 @@ class Pasien extends CI_Controller
             $this->load->model("Menu_model");
             $this->load->model("Pasien_model");
             $this->load->model("Usersmanagement_model");
+            $this->load->helper("rupiah");
         }
     }
 
