@@ -21,15 +21,23 @@
                         <!-- Tabel Data Pasien -->
                         <div class="card">
                             <div class="mt-3 col-sm-2">
-                                <a href="<?= base_url('Pasien') ?>" onclick="exportToExcel('kt-tabel', 'data')">
+                                <a href="<?= base_url('Pasien') ?>">
                                     <button class="btn btn-sm btn-outline-danger justify-content-center" tabindex="0" aria-controls="DataTables_Table_0" type="button">
                                         <i class='bx bx-chevron-left'></i>
-                                        <span>Kembali</span>
+                                        <span>Kembali</span> 
                                     </button>
                                 </a>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
                                 <h4 class="card-header fw-bold px-1 pt-3 pb-3">Detail Rekam Medis</h4>
+                                <div class="">
+                                    <a href="#" onclick="exportToExcel('pegawai', 'rekam-medis')">
+                                        <button class="btn btn-sm btn-outline-primary justify-content-center" tabindex="0" aria-controls="DataTables_Table_0" type="button">
+                                            <i class="bx bx-export me-sm-1 pb-1"></i>
+                                            <span class="d-none d-sm-inline-block">Export</span>
+                                        </button>
+                                    </a>
+                                </div>
                             </div>
                             <table id="pegawai" class="table table-hover"> 
                                 <thead>
@@ -68,3 +76,31 @@
         </div>
     </div>
 </div>
+
+<script>
+function exportToExcel(tableID, filename = ''){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+    filename = filename?filename+'.xls':'excel_data.xls';
+
+    downloadLink = document.createElement("a");
+
+    document.body.appendChild(downloadLink);
+
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['\ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+        downloadLink.download = filename;
+
+        downloadLink.click();
+    }
+}
+</script>

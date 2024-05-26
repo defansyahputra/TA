@@ -64,6 +64,7 @@ class Appointment extends CI_Controller
         ];
 
         $this->data['list_appointment'] = $this->Appointment_model->getAllAppointment();
+		$this->data['list_klinik'] = $this->Appointment_model->getAllKlinik();
 
         $this->load->view('component/header', $this->data);
         $this->load->view('component/sidebar', $this->data);

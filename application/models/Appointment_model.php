@@ -20,4 +20,12 @@ class Appointment_model extends CI_Model
 		$this->db->where($condition);
 		$this->db->delete('tb_reservasi');
 	}
+
+    function getAllKlinik()
+    {
+      $this->db->from('tb_klinik');
+      $query = $this->db->get();
+
+      return $query->result();
+    }
 }
