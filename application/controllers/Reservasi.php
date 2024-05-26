@@ -52,21 +52,50 @@ class Reservasi extends CI_Controller
 
 	public function index()
 	{
-		$this->data['title'] = 'Reservasi';
+		$this->form_validation->set_rules('klinik', 'Klinik', 'required');
+        $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
+        $this->form_validation->set_rules('jam', 'Jam', 'required');
 
-		$this->data['breadcrumbs'] = [];
+		if ($this->form_validation->run() == TRUE) {
+            $data = array (
+				'id_pasien' => $this->data['user_id'],
+				'id_klinik' => decrypt_url($this->input->post('klinik')),
+				'tanggal' => $this->input->post('tanggal'),
+				'jam' => $this->input->post('jam')
+			);
 
-		$this->data['breadcrumbs'][] = [
-			'active' => FALSE,
-			'text' => 'Reservasi',
-			'class' => 'breadcrumb-item pe-3 text-gray-400',
-			'href' => site_url('Reservasi')
-		]; 
+            $this->Reservasi_model->addAppointment($data);
 
-		$this->load->view('component/header', $this->data);
-		$this->load->view('component/sidebar', $this->data);
-		$this->load->view('component/navbar', $this->data);
-		$this->load->view('reservasi/views', $this->data);
-		$this->load->view('component/footer');
+            redirect('Reservasi');
+        } else {
+            $this->data['selected_klinik'] = $this->input->post('klinik');
+            $this->data['tanggal'] = $this->input->post('tanggal');
+            $this->data['jam'] = $this->input->post('jam');
+
+            $this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+            $this->data['action'] = site_url('Reservasi');
+            $this->data['url'] = site_url('Reservasi');
+            $this->data['title'] = "Reservasi Jadwal";
+            
+            $this->data['title'] = 'Reservasi Jadwal';
+
+            $this->data['breadcrumbs'] = [];
+
+            $this->data['breadcrumbs'][] = [
+                'active' => FALSE,
+                'text' => 'Reservasi Jadwal',
+                'class' => 'breadcrumb-item pe-3 text-gray-400',
+                'href' => site_url('Reservasi')
+            ];
+
+			$this->data['list_klinik'] = $this->Reservasi_model->getAllKlinik();
+			$this->data['list_reservasi'] = $this->Reservasi_model->getAllReservasi();
+    
+            $this->load->view('component/header', $this->data);
+			$this->load->view('component/sidebar', $this->data);
+			$this->load->view('component/navbar', $this->data);
+			$this->load->view('reservasi/views', $this->data);
+			$this->load->view('component/footer', $this->data);
+		}
 	}
 }
