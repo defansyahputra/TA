@@ -7,28 +7,14 @@ class Rekam_medis_model extends CI_Model
         parent::__construct();
     }
 
-    function getAllPasien()
+    function getRekamMedis()
     {
-      $this->db->select("*, users.id as id_user");
-      $this->db->from("users");
-      $this->db->join('user_profiles', 'users.id = user_profiles.id');
+      $user_id = $this->session->userdata('user_id');
 
-      return $this->db->get();  
-    }
-
-    function getAllKlinik()
-    {
-      $this->db->from('tb_klinik');
+      $this->db->from('rekamedis_view');
+      $this->db->where('id_pasien', $user_id);
       $query = $this->db->get(); 
 
       return $query->result();
-    }
-
-    function getPasienByKlinik($id_klinik)
-    {
-        $this->db->select("*, users.id as id_user");
-        $this->db->from("users");
-        $this->db->where('id_klinik', $id_klinik);
-        return $this->db->get()->result();
     }
 }

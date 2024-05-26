@@ -1,14 +1,15 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Rekam_Medis extends CI_Controller
+class Appointment extends CI_Controller
 {
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->load->library('tank_auth');
-		
+		$this->load->helper('rupiah');
+
 
 		if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
@@ -30,11 +31,11 @@ class Rekam_Medis extends CI_Controller
 				$this->data['full_name_role'] = $val['full'];
 			}
 
-			$this->data['link_active'] = 'Rekam_Medis';
+			$this->data['link_active'] = 'Appointment';
 
 			//buat permission
 			if (!$this->tank_auth->permit($this->data['link_active'])) {
-				redirect('Rekam_Medis');
+				redirect('Appointment');
 			}
 
 			$this->load->model("Showmenu_model");
@@ -45,30 +46,37 @@ class Rekam_Medis extends CI_Controller
 			$this->data['openMenu'] = $this->Showmenu_model->getDataOpenMenu($OpenShowMenu->id_menu_parent);
 
 			$this->load->model("Menu_model");
-			$this->load->model("Rekam_medis_model");
-			$this->load->helper("rupiah");
+			$this->load->model("Appointment_model");
 		}
 	}
- 
+
 	public function index()
 	{
-		$this->data['title'] = 'Rekam Medis';
+        $this->data['title'] = 'Reservasi Jadwal';
 
-		$this->data['breadcrumbs'] = [];
+        $this->data['breadcrumbs'] = [];
 
-		$this->data['breadcrumbs'][] = [
-			'active' => FALSE,
-			'text' => 'Rekam Medis',
-			'class' => 'breadcrumb-item pe-3 text-gray-400',
-			'href' => site_url('Rekam_Medis')
-		];
+        $this->data['breadcrumbs'][] = [
+            'active' => FALSE,
+            'text' => 'Reservasi Jadwal',
+            'class' => 'breadcrumb-item pe-3 text-gray-400',
+            'href' => site_url('Reservasi')
+        ];
 
-        $this->data['list_rekammedis'] = $this->Rekam_medis_model->getRekamMedis();
+        $this->data['list_appointment'] = $this->Appointment_model->getAllAppointment();
 
-		$this->load->view('component/header', $this->data);
-		$this->load->view('component/sidebar', $this->data);
-		$this->load->view('component/navbar', $this->data);
-		$this->load->view('rekam_medis/views', $this->data);
-		$this->load->view('component/footer', $this->data); 
+        $this->load->view('component/header', $this->data);
+        $this->load->view('component/sidebar', $this->data);
+        $this->load->view('component/navbar', $this->data);
+        $this->load->view('reservasi/appointment', $this->data);
+        $this->load->view('component/footer', $this->data);
+		
 	}
+
+    public function delete($id_reservasi)
+    {
+        $condition['id_reservasi'] = $id_reservasi;
+		$this->Appointment_model->deleteAppointment($condition);
+		redirect('Appointment');
+    }
 }
