@@ -20,6 +20,16 @@
                         <div class="card pb-3 px-4">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h4 class="card-header fw-bold px-1 pt-3 pb-3">List Pasien</h4>
+                                <div class="table-responsive text-nowrap">
+                                    <div class="pb-3 pt-4">
+                                        <a href="<?= base_url('Usersmanagement/add') ?>">
+                                            <button class="btn btn-outline-primary" tabindex="0" aria-controls="DataTables_Table_0" type="button">
+                                                <i class="bx bx-plus me-sm-1"></i>
+                                                <span class="d-none d-sm-inline-block">Tambah Pasien</span>
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                             <div class="table-responsive text-nowrap">
                                 <div class="mb-3 col-sm-2">
