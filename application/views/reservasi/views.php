@@ -16,29 +16,25 @@
                             </span>
                         <?php } ?>
                     </h6>
-                    <div class="row">
-                        <div class="card pb-3 px-4">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h4 class="card-header fw-bold px-1 pt-3 pb-3">List Pasien</h4>
+                    <div class="row d-flex justify-content-between align-items-center">
+                        <div class="col-lg-9">
+                            <div class="card pb-3 px-4">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="card-header fw-bold px-0 pt-3 pb-3">Reservasi Jadwal</h4>
+                                </div>
+                                <div>
+                                    Content
+                                </div>
                             </div>
-                            <div class="table-responsive text-nowrap">
-                                <table id="pegawai" class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No</th>
-                                            <th class="text-center">Nama</th>
-                                            <th class="text-center">Kategori Pasien</th>
-                                            <th class="text-center">Alamat</th>
-                                            <th class="text-center">NO.HP</th>
-                                            <th class="text-center">Jenis Kelamin</th>
-                                            <th class="text-center">Tanggal Lahir</th>
-                                            <th class="text-center">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="table-border-bottom-0" id="pasien-table-body">
-                                       
-                                    </tbody>
-                                </table>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card pb-3 px-4">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="card-header fw-bold px-0 pt-3 pb-3">Kalender</h4>
+                                </div>
+                                <div>
+                                    Content
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -61,7 +61,7 @@ class Reservasi extends CI_Controller
 			'text' => 'Reservasi',
 			'class' => 'breadcrumb-item pe-3 text-gray-400',
 			'href' => site_url('Reservasi')
-		];
+		]; 
 
 		$this->load->view('component/header', $this->data);
 		$this->load->view('component/sidebar', $this->data);
