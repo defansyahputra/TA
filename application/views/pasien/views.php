@@ -117,7 +117,7 @@
             var id_klinik = $(this).val();
             if (id_klinik) {
                 $.ajax({
-                    url: '<?= site_url('Rekam_Medis/getPasienByKlinik') ?>',
+                    url: '<?= site_url('Pasien/getPasienByKlinik') ?>',
                     type: 'POST',
                     data: {id_klinik: id_klinik},
                     dataType: 'json',
