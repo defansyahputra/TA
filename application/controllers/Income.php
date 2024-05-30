@@ -46,7 +46,8 @@ class Income extends CI_Controller
             $this->data['openMenu'] = $this->Showmenu_model->getDataOpenMenu($OpenShowMenu->id_menu_parent);
 
             $this->load->model("Menu_model");
-            // $this->load->model("Income_model");
+            $this->load->model("Income_model");
+            $this->load->helper("rupiah");
         }
     }
 
@@ -63,6 +64,8 @@ class Income extends CI_Controller
             'class' => 'breadcrumb-item pe-3 text-gray-400',
             'href' => site_url('Income')
         ];
+
+        $this->data['TotalIncome'] = $this->Income_model->getAllIncome();
 
         $this->load->view('component/header', $this->data);
         $this->load->view('component/sidebar', $this->data);

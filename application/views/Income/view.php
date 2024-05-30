@@ -24,7 +24,7 @@
                                             <small class="text-muted">1 - 30 Januari 2024</small>
                                         </div>
                                         <hr class="my-2">
-
+                                        <h2 class="fw-bold"><?= rupiah($TotalIncome) ?></h2>
                                         <h6><a class="list-group-item-success">+33% </a>&nbspdari bulan lalu</h6>
                                     </div>
                                 </div>
@@ -55,21 +55,21 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-9 col-lg-12 mb-4">
+                            <!-- <div class="col-sm-9 col-lg-12 mb-4">
                                 <div class="card text-center">
                                     <div class="card-body">
                                         <h5 class="card-title mb-0">pendapatan Bersih</h5>
                                         <canvas id="myChart" height="100px"></canvas>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script>
+    <!-- <script>
         const xBersih = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const yBersih = [1000, 1200, 1400, 1300, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200];
         const yKotor = [2200, 2400, 1200, 1800, 1300, 2200, 2000, 2600, 2400, 3000, 2800, 3200];
@@ -110,6 +110,6 @@
                 },
             }
         });
-    </script>
+    </script> -->
 
 </body>

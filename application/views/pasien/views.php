@@ -71,7 +71,7 @@
                                                 ?>
                                                 <tr>
                                                     <td class="text-center"><?= $no; ?></td>
-                                                    <td class="text-center"><?= $pasien->username; ?></td>
+                                                    <td class="text-center"><?= $pasien->name; ?></td>
                                                     <td class="text-center"><?= $pasien->kategori_pasien; ?></td>
                                                     <td class="text-center"><?= $pasien->alamat; ?></td>
                                                     <td class="text-center"><?= $pasien->nohp; ?></td>
