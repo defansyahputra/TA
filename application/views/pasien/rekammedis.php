@@ -83,18 +83,22 @@
                       </div>
                     </div>
                     <hr>
-
-                    <!-- Dynamic Fields Section -->
-                    <div id="dynamic-form-fields">
-                      <!-- Dynamic form fields will be added here -->
-                    </div>
-
                     <div class="row mb-3">
                       <div class="col-sm-10 offset-sm-2">
                         <button type="button" id="add-field" class="btn btn-sm btn-outline-primary">Add Assesment</button>
                       </div>
                     </div>
-
+                    <!-- Dynamic Fields Section -->
+                    <div id="dynamic-form-fields">
+                      <!-- Dynamic form fields will be added here -->
+                    </div>
+                    <hr>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label" for="plan">Total</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="total" autocomplete="off" value=""/>
+                      </div>
+                    </div>
                     <div class="row mb-3">
                       <div class="col-sm-10 offset-sm-2">
                         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -116,6 +120,39 @@
   <!-- / Layout wrapper -->
 
   <script>
+    const form = document.querySelector('form');
+    const totalInput = document.getElementById('total');
+
+    function updateTotal() {
+      let total = 0;
+      const hargaInputs = document.querySelectorAll('input[name^="harga"]');
+      hargaInputs.forEach(input => {
+        total += parseFloat(input.value) || 0;
+      });
+      totalInput.value = total.toLocaleString();
+    }
+
+    function addRemoveEventListener() {
+      const removeFieldButtons = document.querySelectorAll('.remove-field');
+      removeFieldButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          const fieldId = this.getAttribute('data-id');
+          const fieldSetToRemove = document.getElementById('field-set-' + fieldId);
+          fieldSetToRemove.remove();
+          updateTotal();
+        });
+      });
+    }
+
+    form.addEventListener('input', function (event) {
+      const target = event.target;
+      if (target.matches('input[name^="harga"]')) {
+        updateTotal();
+      }
+    });
+
+    updateTotal();
+
     document.addEventListener('DOMContentLoaded', function () {
       const addFieldButton = document.getElementById('add-field');
       const dynamicFormFields = document.getElementById('dynamic-form-fields');
@@ -128,11 +165,6 @@
         fieldSet.id = 'field-set-' + fieldCounter;  
 
         fieldSet.innerHTML = `
-        <div class="row mb-3">
-          <div class="col-sm-4">
-            <input type="hidden" name="id_assesment" class="form-control" value="${fieldCounter}">
-          </div>
-        </div>
         <div class="row mb-3">
           <label class="col-sm-2 col-form-label" for="kategori_tindakan[${fieldCounter}]">Kategori Tindakan</label>
           <div class="col-sm-4">
