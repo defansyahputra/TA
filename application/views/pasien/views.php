@@ -143,6 +143,9 @@
                                                 '<a class="dropdown-item" href="<?= site_url('Pasien/rekammedis/') ?>' + pasien.id + '">' +
                                                     '<i class="bx bx-edit-alt me-1"></i> Rekam Medis' +
                                                 '</a>' +
+                                                '<a class="dropdown-item" href="<?= site_url('Pasien/detail/') ?>' + pasien.id + '">' +
+                                                    '<i class="bx bx-spreadsheet"></i> Detail Rekam Medis' +
+                                                '</a>' +
                                                 '<a class="dropdown-item" href="<?= site_url('Usersmanagement/delete/') ?>' + pasien.id + '" onclick="return confirm(\'Are You Sure Want to Delete This Data?\')">' +
                                                     '<i class="bx bx-trash me-1"></i> Delete' +
                                                 '</a>' +

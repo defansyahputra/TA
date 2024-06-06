@@ -66,11 +66,20 @@ class Income extends CI_Controller
         ];
 
         $this->data['TotalIncome'] = $this->Income_model->getAllIncome();
+        $this->data['TotalIncomeLembang'] = $this->Income_model->getAllIncomeLembang();
+        $this->data['TotalIncomeCibadak'] = $this->Income_model->getAllIncomeCibadak();
+        $this->data['TotalIncomeBojongsoang'] = $this->Income_model->getAllIncomeBojongsoang();
 
         $this->load->view('component/header', $this->data);
         $this->load->view('component/sidebar', $this->data);
         $this->load->view('component/navbar', $this->data);
         $this->load->view('Income/view', $this->data);
         $this->load->view('component/footer');
+    }
+
+    public function chartData()
+    {
+        $data = $this->Income_model->getIncomeChart();
+        echo json_encode($data);
     }
 }
