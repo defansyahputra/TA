@@ -46,6 +46,25 @@ class Income_model extends CI_Model
 
     public function getIncomeChart()
     {
-        return $this->db->get('rekamedis_view')->result();
+        return $this->db->get('rekamedis_view')->result(); 
+    }
+
+    public function getMonthlyIncome()
+    {
+        $this->db->select('YEAR(date) as year, MONTH(date) as month, SUM(harga) as total_income');
+        $this->db->from('rekamedis_view');  // Assuming 'tb_income' is your income table
+        $this->db->group_by(['year', 'month']);
+        $this->db->order_by('year', 'month');
+        $query = $this->db->get();
+
+        $result = [];
+        foreach ($query->result() as $row) {
+            $result[] = [
+                'year' => $row->year,
+                'month' => $row->month,
+                'total_income' => $row->total_income
+            ];
+        }
+        return $result;
     }
 }

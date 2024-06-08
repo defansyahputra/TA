@@ -87,4 +87,9 @@ class Pasien_model extends CI_Model
 
         return $query->result();
     }
+
+    public function get_tindakan_by_kategori($kategori_id) {
+      $this->db->where('id_kategori_tindakan', $kategori_id);
+      return $this->db->get('view_tindakan')->result();
+  }
 }

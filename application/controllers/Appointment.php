@@ -63,7 +63,7 @@ class Appointment extends CI_Controller
             'href' => site_url('Reservasi')
         ];
 
-        $this->data['list_appointment'] = $this->Appointment_model->getAllAppointment();
+        $this->data['list_appointment'] = $this->Appointment_model->getAllAppointment(); 
 		$this->data['list_klinik'] = $this->Appointment_model->getAllKlinik();
 
         $this->load->view('component/header', $this->data);
@@ -79,5 +79,20 @@ class Appointment extends CI_Controller
         $condition['id_reservasi'] = $id_reservasi;
 		$this->Appointment_model->deleteAppointment($condition);
 		redirect('Appointment');
+    }
+
+	public function updateStatus($id_reservasi)
+    {
+        $data = ['status' => 1];  // Set status to 1
+
+        // Perform update operation and check if it was successful
+        if ($this->Appointment_model->updateAppointment($id_reservasi, $data)) {
+            $this->session->set_flashdata('message', 'Appointment status updated successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to update appointment status.');
+        }
+
+        // Redirect to appointments list
+        redirect('Appointment');
     }
 }

@@ -79,7 +79,7 @@ class Income extends CI_Controller
 
     public function chartData()
     {
-        $data = $this->Income_model->getIncomeChart();
+        $data = $this->Income_model->getMonthlyIncome();
         echo json_encode($data);
     }
 }

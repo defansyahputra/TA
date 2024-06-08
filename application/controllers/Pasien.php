@@ -107,7 +107,7 @@ class Pasien extends CI_Controller
                     'id_kategori_tindakan' => $kategori_tindakan[$key],
                     'id_tindakan' => $tindakan[$key],
                     'gigi' => $gigi[$key],
-                    'harga' => $harga[$key]
+                    'harga' => str_replace(['.', ','], '', $harga[$key])
                 ];
             }
 
@@ -153,7 +153,7 @@ class Pasien extends CI_Controller
 		}
     }
 
-    public function get_tindakan()
+    public function get_tindakan() 
     {
         $getTindakan = $this->Pasien_model->getDetailTindakan(decrypt_url($this->input->post('id_kategori_tindakan')));
 
@@ -200,5 +200,11 @@ class Pasien extends CI_Controller
 		$this->load->view('component/navbar', $this->data);
 		$this->load->view('pasien/detail', $this->data);
 		$this->load->view('component/footer', $this->data);
+    }
+
+    public function get_tindakan_by_kategori() {
+        $kategori_id = $this->input->post('kategori_id');
+        $tindakan = $this->Pasien_model->get_tindakan_by_kategori($kategori_id);
+        echo json_encode($tindakan);
     }
 }

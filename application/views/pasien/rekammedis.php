@@ -67,19 +67,19 @@
                     <div class="row mb-3">
                       <label class="col-sm-2 col-form-label" for="subject">Subject</label>
                       <div class="col-sm-10">
-                        <textarea type="text" class="form-control" name="subject" id="subject" placeholder="Masukkan Subject . . ." autocomplete="off" value="<?php if (isset($subject)) { echo $subject; } ?>"></textarea>
+                        <textarea type="text" class="form-control" name="subject" id="subject" placeholder="Masukkan Subject . . ." autocomplete="off"><?php if (isset($subject)) { echo $subject; } ?></textarea>
                       </div>
                     </div>
                     <div class="row mb-3">
                       <label class="col-sm-2 col-form-label" for="object">Object</label>
                       <div class="col-sm-10">
-                        <textarea type="text" class="form-control" name="object" id="object" placeholder="Masukkan Object . . ." autocomplete="off" value="<?php if (isset($object)) { echo $object; } ?>"></textarea>
+                        <textarea type="text" class="form-control" name="object" id="object" placeholder="Masukkan Object . . ." autocomplete="off"><?php if (isset($object)) { echo $object; } ?></textarea>
                       </div>
                     </div>
                     <div class="row mb-3">
                       <label class="col-sm-2 col-form-label" for="plan">Plan</label>
                       <div class="col-sm-10">
-                        <textarea type="text" class="form-control" name="plan" id="plan" placeholder="Masukkan Plan . . ." autocomplete="off" value="<?php if (isset($plan)) { echo $plan; } ?>"></textarea>
+                        <textarea type="text" class="form-control" name="plan" id="plan" placeholder="Masukkan Plan . . ." autocomplete="off"><?php if (isset($plan)) { echo $plan; } ?></textarea>
                       </div>
                     </div>
                     <hr>
@@ -94,7 +94,7 @@
                     </div>
                     <hr>
                     <div class="row mb-3">
-                      <label class="col-sm-2 col-form-label" for="plan">Total</label>
+                      <label class="col-sm-2 col-form-label" for="total">Total</label>
                       <div class="col-sm-10">
                         <input type="text" class="form-control" id="total" autocomplete="off" value=""/>
                       </div>
@@ -109,7 +109,6 @@
               </div>
             </div>
           </div>
-
         </div>
         <!-- / Content -->
       </div>
@@ -127,9 +126,9 @@
       let total = 0;
       const hargaInputs = document.querySelectorAll('input[name^="harga"]');
       hargaInputs.forEach(input => {
-        total += parseFloat(input.value) || 0;
+        total += parseFloat(input.value.replace(/\./g, '')) || 0;
       });
-      totalInput.value = total.toLocaleString();
+      totalInput.value = total.toLocaleString('id-ID');
     }
 
     function addRemoveEventListener() {
@@ -147,11 +146,10 @@
     form.addEventListener('input', function (event) {
       const target = event.target;
       if (target.matches('input[name^="harga"]')) {
+        target.value = formatRupiah(target.value);
         updateTotal();
       }
     });
-
-    updateTotal();
 
     document.addEventListener('DOMContentLoaded', function () {
       const addFieldButton = document.getElementById('add-field');
@@ -162,43 +160,23 @@
         fieldCounter++;
         const fieldSet = document.createElement('div');
         fieldSet.className = 'row mb-3';
-        fieldSet.id = 'field-set-' + fieldCounter;  
+        fieldSet.id = 'field-set-' + fieldCounter;
 
         fieldSet.innerHTML = `
         <div class="row mb-3">
           <label class="col-sm-2 col-form-label" for="kategori_tindakan[${fieldCounter}]">Kategori Tindakan</label>
           <div class="col-sm-4">
-          <select name="kategori_tindakan[${fieldCounter}]" id="kategori_tindakan[${fieldCounter}]" class="form-select kategori-tindakan" data-placeholder="Pilih Kategori tindakan . . .">
-            <option value="">Pilih Kategori tindakan</option>
-            <?php
-            foreach ($list_kategori_tindakan as $kategori_tindakan) {
-              if ($kategori_tindakan->id_kategori_tindakan == $selected_kategori_tindakan) {
-                ?>
-                <option value="<?php echo $kategori_tindakan->id_kategori_tindakan; ?>" selected><?php echo $kategori_tindakan->kategori_tindakan; ?></option>
-              <?php } else { ?>
+            <select name="kategori_tindakan[${fieldCounter}]" id="kategori_tindakan-${fieldCounter}" class="form-select kategori-tindakan" data-placeholder="Pilih Kategori tindakan . . .">
+              <option value="">Pilih Kategori tindakan</option>
+              <?php foreach ($list_kategori_tindakan as $kategori_tindakan) { ?>
                 <option value="<?php echo $kategori_tindakan->id_kategori_tindakan; ?>"><?php echo $kategori_tindakan->kategori_tindakan; ?></option>
-                <?php
-              }
-            }
-            ?>
-        </select>
+              <?php } ?>
+            </select>
           </div>
           <label class="col-sm-2 col-form-label" for="tindakan[${fieldCounter}]">Tindakan</label>
           <div class="col-sm-4">
-          <select name="tindakan[${fieldCounter}]" id="tindakan[${fieldCounter}]" class="form-select kategori-tindakan" data-placeholder="Pilih tindakan . . .">
-            <option value="">Pilih tindakan</option>
-            <?php
-            foreach ($list_tindakan as $tindakan) {
-              if ($tindakan->id_tindakan == $selected_tindakan) {
-                ?>
-                <option value="<?php echo $tindakan->id_tindakan; ?>" selected><?php echo $tindakan->tindakan; ?></option>
-              <?php } else { ?>
-                <option value="<?php echo $tindakan->id_tindakan; ?>"><?php echo $tindakan->tindakan; ?></option>
-                <?php
-              }
-            }
-            ?>
-        </select>
+            <select name="tindakan[${fieldCounter}]" id="tindakan-${fieldCounter}" class="form-select select-tindakan" data-placeholder="Pilih tindakan . . .">
+            </select>
           </div>
         </div>
         <div class="row mb-3">
@@ -208,7 +186,7 @@
           </div>
           <label class="col-sm-2 col-form-label" for="harga-${fieldCounter}">Harga</label>
           <div class="col-sm-4">
-            <input type="number" name="harga[${fieldCounter}]" class="form-control" placeholder="Harga" required>
+            <input type="text" name="harga[${fieldCounter}]" class="form-control rupiah-input" placeholder="Harga" required>
           </div>
         </div>
         <div class="row mb-3">
@@ -220,15 +198,59 @@
 
         dynamicFormFields.appendChild(fieldSet);
 
-        const removeFieldButtons = document.querySelectorAll('.remove-field');
-        removeFieldButtons.forEach(button => {
-          button.addEventListener('click', function () {
-            const fieldId = this.getAttribute('data-id');
-            const fieldSetToRemove = document.getElementById('field-set-' + fieldId);
-            dynamicFormFields.removeChild(fieldSetToRemove);
+        bindKategoriTindakanChange(`#kategori_tindakan-${fieldCounter}`, `#tindakan-${fieldCounter}`);
+
+        addRemoveEventListener();
+        addRupiahFormatListener(`#harga-${fieldCounter}`);
+      });
+
+      function bindKategoriTindakanChange(kategoriSelector, tindakanSelector) {
+        $(kategoriSelector).change(function () {
+          var id_kategori_tindakan = $(this).val();
+          $.ajax({
+            url: "<?php echo site_url('Pasien/get_tindakan_by_kategori'); ?>",
+            type: 'POST',
+            data: { kategori_id: id_kategori_tindakan },
+            dataType: 'json',
+            success: function (response) {
+              var options = '<option value="">Pilih Tindakan</option>';
+              $.each(response, function (index, tindakan) {
+                options += `<option value="${tindakan.id_tindakan}">${tindakan.tindakan}</option>`;
+              });
+              $(tindakanSelector).html(options);
+            }
           });
         });
-      });
+      }
+
+      function addRupiahFormatListener(selector) {
+        const rupiahInputs = document.querySelectorAll(selector);
+        rupiahInputs.forEach(input => {
+          input.addEventListener('input', function (e) {
+            e.target.value = formatRupiah(e.target.value);
+          });
+        });
+      }
+
+      addRupiahFormatListener('input[name^="harga"]');
+
+      bindKategoriTindakanChange('#kategori_tindakan-0', '#tindakan-0');
     });
+
+    function formatRupiah(angka, prefix = '') {
+      const number_string = angka.replace(/[^,\d]/g, '').toString();
+      const split = number_string.split(',');
+      const sisa = split[0].length % 3;
+      let rupiah = split[0].substr(0, sisa);
+      const ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+      if (ribuan) {
+        const separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+      }
+
+      rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+      return prefix + rupiah;
+    }
   </script>
 </div>

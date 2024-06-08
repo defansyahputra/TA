@@ -10,6 +10,7 @@ class Appointment_model extends CI_Model
     function getAllAppointment()
     {
         $this->db->from('view_reservasi');
+        $this->db->where('status', 0);
         $query = $this->db->get(); 
 
         return $query->result();
@@ -20,6 +21,12 @@ class Appointment_model extends CI_Model
 		$this->db->where($condition);
 		$this->db->delete('tb_reservasi');
 	}
+
+    function updateAppointment($id_reservasi, $data)
+    {
+        $this->db->where('id_reservasi', $id_reservasi);
+        return $this->db->update('tb_reservasi', $data);
+    }
 
     function getAllKlinik()
     {

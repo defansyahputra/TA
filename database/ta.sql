@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 26, 2024 at 10:57 AM
+-- Generation Time: Jun 08, 2024 at 12:38 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -93,7 +93,8 @@ INSERT INTO `menu` (`id_menu`, `id_menu_parent`, `nama_menu`, `icon`, `kategori`
 (44, 0, 'Rekam Medis', 'bx bx-plus-medical', 'Controller', 'Rekam_Medis', 'Y', '3'),
 (45, 46, 'Reservasi Jadwal', '', 'Controller', 'Reservasi', 'Y', '2'),
 (46, 0, 'Jadwal', 'bx bxs-book-add', 'Controller', '', 'Y', '5'),
-(47, 46, 'Appointment', '', 'Controller', 'Appointment', 'Y', '1');
+(47, 46, 'Appointment', '', 'Controller', 'Appointment', 'Y', '1'),
+(48, 0, 'Income', 'bx bx-money-withdraw', 'Controller', 'Income', 'Y', '8');
 
 -- --------------------------------------------------------
 
@@ -138,7 +139,8 @@ INSERT INTO `permissions` (`permission_id`, `permission`, `description`, `parent
 (11, 'Tambah_Tindakan', 'Tambah Tindakan', NULL, NULL),
 (12, 'Rekam_Medis', 'Rekam Medis', NULL, NULL),
 (13, 'Reservasi', 'Reservasi', NULL, NULL),
-(14, 'Appointment', 'Appointment', NULL, NULL);
+(14, 'Appointment', 'Appointment', NULL, NULL),
+(15, 'Income', 'Income', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -160,6 +162,7 @@ CREATE TABLE `rekamedis_view` (
 ,`gigi` varchar(128)
 ,`harga` varchar(128)
 ,`date` date
+,`id_klinik` int(10)
 );
 
 -- --------------------------------------------------------
@@ -206,6 +209,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES
 (0, 5),
 (0, 6),
 (0, 0),
+(2, 6),
+(2, 12),
+(2, 13),
 (3, 2),
 (3, 3),
 (3, 4),
@@ -219,9 +225,8 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES
 (3, 12),
 (3, 13),
 (3, 14),
-(2, 6),
-(2, 12),
-(2, 13),
+(3, 15),
+(1, 5),
 (1, 6),
 (1, 7),
 (1, 8),
@@ -334,14 +339,22 @@ INSERT INTO `tb_rekamedis` (`id_rekamedis`, `id_pasien`, `id_kategori_tindakan`,
 (2, 3, 0, 0, 'tes', 'tes', 'tes', '34', '9000', '2024-05-25'),
 (3, 4, 2, 1, 'coba', 'coba', 'coba', '34', '90000', '2024-05-25'),
 (4, 3, 8, 5, 'coba', 'coba', 'coba', '34', '900000', '2024-05-25'),
-(5, 3, 10, 1, 'coba', 'coba', 'coba', '35', '800000000', '2024-05-25'),
+(5, 3, 10, 1, 'coba', 'coba', 'coba', '35', '800000', '2024-05-25'),
 (6, 7, 7, 1, 'Cenat cenut gigi na', 'ditemukan bolong pada gigi na', 'tambal broo', '34', '2000000', '2024-05-25'),
 (7, 7, 7, 3, 'Cenat cenut gigi na', 'ditemukan bolong pada gigi na', 'tambal broo', '34', '800000', '2024-05-25'),
 (8, 5, 7, 2, 'Nyeri mau die', 'wahh ternyata bolong nihh gigi lu puki', 'cabut gigi', '27', '500000', '2024-05-25'),
 (9, 5, 7, 3, 'Nyeri mau die', 'wahh ternyata bolong nihh gigi lu puki', 'cabut gigi', '27', '700000', '2024-05-25'),
 (10, 5, 2, 2, 'Nyeri mau die', 'wahh ternyata bolong nihh gigi lu puki', 'cabut gigi', '17', '200000', '2024-05-25'),
 (11, 4, 7, 1, 'coba', 'coba', 'coba', '34', '8000000', '2024-05-25'),
-(12, 9, 8, 2, 'nyeri pada gusi', 'gigi lubang', 'cabut gigi', '34', '80000', '2024-05-26');
+(12, 9, 8, 2, 'nyeri pada gusi', 'gigi lubang', 'cabut gigi', '34', '80000', '2024-05-26'),
+(13, 7, 2, 2, 'total', 'total', 'total', '34', '800000', '2024-05-30'),
+(14, 7, 7, 6, 'total', 'total', 'total', '35', '300000', '2024-05-30'),
+(15, 12, 2, 1, 'coba ya', 'coba ya', 'coba ya', '27', '400000', '2024-06-08'),
+(16, 12, 7, 3, 'coba ya', 'coba ya', 'coba ya', '34', '750000', '2024-06-08'),
+(17, 9, 2, 2, 'tes', 'tes', 'tes', '34', '300000', '2024-06-08'),
+(18, 9, 7, 3, 'tes', 'tes', 'tes', '34', '450000', '2024-06-08'),
+(19, 12, 2, 1, 'coba', 'coba', 'coba', '34', '250.000', '2024-06-08'),
+(20, 12, 2, 2, 'lagi', 'lagi', 'lagi', '27', '300000', '2024-06-08');
 
 -- --------------------------------------------------------
 
@@ -354,15 +367,19 @@ CREATE TABLE `tb_reservasi` (
   `id_klinik` int(10) NOT NULL,
   `id_pasien` int(10) NOT NULL,
   `tanggal` date NOT NULL,
-  `jam` time NOT NULL
+  `jam` time NOT NULL,
+  `status` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tb_reservasi`
 --
 
-INSERT INTO `tb_reservasi` (`id_reservasi`, `id_klinik`, `id_pasien`, `tanggal`, `jam`) VALUES
-(2, 3, 9, '2024-06-08', '15:00:00');
+INSERT INTO `tb_reservasi` (`id_reservasi`, `id_klinik`, `id_pasien`, `tanggal`, `jam`, `status`) VALUES
+(2, 3, 9, '2024-06-08', '15:00:00', 0),
+(3, 3, 9, '2024-06-15', '15:30:00', 0),
+(4, 1, 12, '2024-06-19', '01:33:00', 0),
+(5, 2, 12, '2024-06-20', '04:35:00', 0);
 
 -- --------------------------------------------------------
 
@@ -435,14 +452,15 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `id_klinik`, `kategori_pasien`, `username`, `password`, `email`, `nohp`, `tanggal_lahir`, `jenis_kelamin`, `alamat`, `activated`, `banned`, `ban_reason`, `new_password_key`, `new_password_requested`, `new_email`, `new_email_key`, `approved`, `meta`, `last_ip`, `last_login`, `created`, `modified`) VALUES
 (1, 0, '', 'admin', '$2a$10$gtANPNMiG2UEL9fPbbJaBOKY1juVGP8PhYCKJWuV6yYIuz29qJF7W', 'defansyahputra@gmail.com', '', NULL, '', '', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"62c4714b325a0\";s:4:\"name\";s:11:\"Raihan Arif\";}', '::1', '2024-03-08 11:36:07', '2022-07-05 19:13:47', '2024-03-15 06:13:34'),
-(2, 0, '', 'sup_admin', '$2a$10$.45q.HlDPIiFaaILIMJfHe7YXmqSKqB8AtZXlplDZgWLqTeBszIzu', 'khuzen.ard@gmail.com', '', NULL, '', '', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"65d085a3965ff\";s:4:\"name\";s:20:\"Khuzainil Ardiansyah\";}', '::1', '2024-05-26 10:36:08', '2024-02-17 11:08:35', '2024-05-26 08:36:08'),
+(2, 0, '', 'sup_admin', '$2a$10$.45q.HlDPIiFaaILIMJfHe7YXmqSKqB8AtZXlplDZgWLqTeBszIzu', 'khuzen.ard@gmail.com', '', NULL, '', '', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"65d085a3965ff\";s:4:\"name\";s:20:\"Khuzainil Ardiansyah\";}', '::1', '2024-06-08 11:14:45', '2024-02-17 11:08:35', '2024-06-08 09:14:45'),
 (3, 1, 'Umum', 'JohnDoe', '$2a$10$EdqClq.6p6WLn28DWn.s/ORI7z1bq4L257o0GVzqO79ANNpAbC/1W', 'JohnDoe@gmail.com', '6281234567890', '1999-05-15', 'P', '123 Main Street, Anytown', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"664f4878f33b7\";s:4:\"name\";s:8:\"John Doe\";}', '::1', '0000-00-00 00:00:00', '2024-05-23 15:45:29', '2024-05-23 13:45:29'),
 (4, 1, 'Orthodentist', 'JaneSmith', '$2a$10$6p8aYKt9SKw8Oh6S.W8zOe9GswxPrLljEePzELDqIWCN0kFZBGtVi', 'JaneSmith@gmail.com', '6282345678901', '1985-10-25', 'W', '456 Oak Avenue, Somewhereville', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"664f48b4d9723\";s:4:\"name\";s:10:\"Jane Smith\";}', '::1', '0000-00-00 00:00:00', '2024-05-23 15:46:28', '2024-05-23 13:46:28'),
 (5, 2, 'Umum', 'AhmadRahman', '$2a$10$KvFX4NUmjTVHn4I5pbdZMesrE0ij5Afecu2.NEio4ZUGsoEUh7i5S', 'AhmadRahman@gmail.com', '6283456789012', '1995-02-08', 'P', '789 Elm Road, Elsewhere City', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"664f4903327d6\";s:4:\"name\";s:12:\"Ahmad Rahman\";}', '::1', '0000-00-00 00:00:00', '2024-05-23 15:47:47', '2024-05-23 13:47:47'),
 (6, 2, 'Orthodentist', 'MariaGarcia', '$2a$10$S13cTpWdwoNk75x.w5Rk8OmhZB71HkCsSvotJkzc0BoSBxnfaPeJS', 'MariaGarcia@gmail.com', '6284567890123', '1988-12-30', 'W', '321 Pine Boulevard, Nowhere Town', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"664f4944c8a3f\";s:4:\"name\";s:12:\"Maria Garcia\";}', '::1', '0000-00-00 00:00:00', '2024-05-23 15:48:52', '2024-05-23 13:48:52'),
 (7, 3, 'Umum', 'ChenWei', '$2a$10$V06Mp9ghHCawofS9LkOY8ucjKIB1fZ4lwHFt/2CV0IOfcyz/fEnVO', 'ChenWei@gmail.com', '6285678901234', '1992-07-18', 'P', '654 Cedar Lane, Anyplace', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"664f49838fcf5\";s:4:\"name\";s:8:\"Chen Wei\";}', '::1', '0000-00-00 00:00:00', '2024-05-23 15:49:55', '2024-05-23 13:49:55'),
-(9, 3, 'Orthodentist', 'pasien', '$2a$10$Suj22l9pQyqFvV1dRWyTZO8x6f4j/.rt1rxQocSmeF2VuGNL8Ixae', 'pasien@gmail.com', '0987654321', '2024-05-04', 'P', 'pasien', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"665234093c0e7\";s:4:\"name\";s:6:\"Pasien\";}', '::1', '2024-05-26 10:34:40', '2024-05-25 20:55:05', '2024-05-26 08:34:40'),
-(10, 0, '', 'dokter', '$2a$10$5V5SHcT2adQ7EvBsWxqdJuiDSTSUNmrG6cfL3lhsrvcmS0LFftgK.', 'dokter@gmail.com', '0987654321', '2024-05-15', 'P', 'dokter', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"665234f6e057b\";s:4:\"name\";s:6:\"Dokter\";}', '::1', '2024-05-26 10:47:25', '2024-05-25 20:59:02', '2024-05-26 08:47:25');
+(9, 3, 'Orthodentist', 'pasien', '$2a$10$Suj22l9pQyqFvV1dRWyTZO8x6f4j/.rt1rxQocSmeF2VuGNL8Ixae', 'pasien@gmail.com', '0987654321', '2024-05-04', 'P', 'pasien', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"665234093c0e7\";s:4:\"name\";s:6:\"Pasien\";}', '::1', '2024-06-07 09:03:36', '2024-05-25 20:55:05', '2024-06-07 07:03:36'),
+(10, 0, '', 'dokter', '$2a$10$5V5SHcT2adQ7EvBsWxqdJuiDSTSUNmrG6cfL3lhsrvcmS0LFftgK.', 'dokter@gmail.com', '0987654321', '2024-05-15', 'P', 'dokter', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"665234f6e057b\";s:4:\"name\";s:6:\"Dokter\";}', '::1', '2024-06-03 15:22:30', '2024-05-25 20:59:02', '2024-06-03 13:22:30'),
+(12, 1, 'Umum', 'pasien1', '$2a$10$mN.GOXn1Mcw0xUF4AMM4g.XJPmHUXrDBxNssp2sS8vKv8otLO8Jr2', 'pasien1@gmail.com', '09876543245', '2024-06-01', 'P', 'pasien1', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"6663440edb82f\";s:4:\"name\";s:8:\"Pasien 1\";}', '::1', '2024-06-07 19:32:08', '2024-06-07 19:31:58', '2024-06-07 17:32:08');
 
 -- --------------------------------------------------------
 
@@ -491,7 +509,8 @@ INSERT INTO `user_profiles` (`id`, `name`, `foto`, `modified`) VALUES
 (6, 'Maria Garcia', '664f4944c8a3f', '2024-05-23 13:48:52'),
 (7, 'Chen Wei', '664f49838fcf5', '2024-05-23 13:49:55'),
 (9, 'Pasien', '665234093c0e7', '2024-05-25 18:55:05'),
-(10, 'Dokter', '665234f6e057b', '2024-05-25 18:59:02');
+(10, 'Dokter', '665234f6e057b', '2024-05-25 18:59:02'),
+(12, 'Pasien 1', '6663440edb82f', '2024-06-07 17:31:58');
 
 -- --------------------------------------------------------
 
@@ -517,7 +536,8 @@ INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
 (6, 2),
 (7, 2),
 (9, 2),
-(10, 1);
+(10, 1),
+(12, 2);
 
 -- --------------------------------------------------------
 
@@ -533,6 +553,7 @@ CREATE TABLE `view_reservasi` (
 ,`nama_pasien` varchar(255)
 ,`tanggal` date
 ,`jam` time
+,`status` int(1)
 );
 
 -- --------------------------------------------------------
@@ -556,7 +577,7 @@ CREATE TABLE `view_tindakan` (
 --
 DROP TABLE IF EXISTS `rekamedis_view`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `rekamedis_view`  AS SELECT `r`.`id_rekamedis` AS `id_rekamedis`, `r`.`id_pasien` AS `id_pasien`, `u`.`name` AS `pasien_name`, `r`.`id_kategori_tindakan` AS `id_kategori_tindakan`, `kt`.`kategori_tindakan` AS `kategori_tindakan`, `r`.`id_tindakan` AS `id_tindakan`, `t`.`tindakan` AS `tindakan`, `r`.`subject` AS `subject`, `r`.`object` AS `object`, `r`.`plan` AS `plan`, `r`.`gigi` AS `gigi`, `r`.`harga` AS `harga`, `r`.`date` AS `date` FROM (((`tb_rekamedis` `r` join `user_profiles` `u` on(`r`.`id_pasien` = `u`.`id`)) join `tb_kategori_tindakan` `kt` on(`r`.`id_kategori_tindakan` = `kt`.`id_kategori_tindakan`)) join `tb_tindakan` `t` on(`r`.`id_tindakan` = `t`.`id_tindakan`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `rekamedis_view`  AS SELECT `r`.`id_rekamedis` AS `id_rekamedis`, `r`.`id_pasien` AS `id_pasien`, `up`.`name` AS `pasien_name`, `r`.`id_kategori_tindakan` AS `id_kategori_tindakan`, `kt`.`kategori_tindakan` AS `kategori_tindakan`, `r`.`id_tindakan` AS `id_tindakan`, `t`.`tindakan` AS `tindakan`, `r`.`subject` AS `subject`, `r`.`object` AS `object`, `r`.`plan` AS `plan`, `r`.`gigi` AS `gigi`, `r`.`harga` AS `harga`, `r`.`date` AS `date`, `u`.`id_klinik` AS `id_klinik` FROM ((((`tb_rekamedis` `r` join `user_profiles` `up` on(`r`.`id_pasien` = `up`.`id`)) join `tb_kategori_tindakan` `kt` on(`r`.`id_kategori_tindakan` = `kt`.`id_kategori_tindakan`)) join `tb_tindakan` `t` on(`r`.`id_tindakan` = `t`.`id_tindakan`)) join `users` `u` on(`u`.`id` = `r`.`id_pasien`)) ;
 
 -- --------------------------------------------------------
 
@@ -565,7 +586,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `view_reservasi`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_reservasi`  AS SELECT `r`.`id_reservasi` AS `id_reservasi`, `r`.`id_klinik` AS `id_klinik`, `k`.`klinik` AS `klinik`, `r`.`id_pasien` AS `id_pasien`, `p`.`name` AS `nama_pasien`, `r`.`tanggal` AS `tanggal`, `r`.`jam` AS `jam` FROM ((`tb_reservasi` `r` join `tb_klinik` `k` on(`r`.`id_klinik` = `k`.`id_klinik`)) join `user_profiles` `p` on(`r`.`id_pasien` = `p`.`id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_reservasi`  AS SELECT `r`.`id_reservasi` AS `id_reservasi`, `r`.`id_klinik` AS `id_klinik`, `k`.`klinik` AS `klinik`, `r`.`id_pasien` AS `id_pasien`, `p`.`name` AS `nama_pasien`, `r`.`tanggal` AS `tanggal`, `r`.`jam` AS `jam`, `r`.`status` AS `status` FROM ((`tb_reservasi` `r` join `tb_klinik` `k` on(`r`.`id_klinik` = `k`.`id_klinik`)) join `user_profiles` `p` on(`r`.`id_pasien` = `p`.`id`)) ;
 
 -- --------------------------------------------------------
 
@@ -672,13 +693,13 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `permission_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `permission_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -696,7 +717,7 @@ ALTER TABLE `tb_kategori_tindakan`
 -- AUTO_INCREMENT for table `tb_klinik`
 --
 ALTER TABLE `tb_klinik`
-  MODIFY `id_klinik` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_klinik` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `tb_pasien`
@@ -708,13 +729,13 @@ ALTER TABLE `tb_pasien`
 -- AUTO_INCREMENT for table `tb_rekamedis`
 --
 ALTER TABLE `tb_rekamedis`
-  MODIFY `id_rekamedis` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_rekamedis` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `tb_reservasi`
 --
 ALTER TABLE `tb_reservasi`
-  MODIFY `id_reservasi` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_reservasi` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tb_tindakan`
@@ -726,19 +747,19 @@ ALTER TABLE `tb_tindakan`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `user_profiles`
 --
 ALTER TABLE `user_profiles`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
