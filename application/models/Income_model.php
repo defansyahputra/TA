@@ -15,31 +15,55 @@ class Income_model extends CI_Model
 
     public function getAllIncomeLembang()
     {
+        $currentYear = date('Y');
+        $currentMonth = date('m');
         $id_klinik = 2;
 
+        $whereCondition = array(
+            'YEAR(date)' => $currentYear,
+            'MONTH(date)' => $currentMonth,
+            'id_klinik' => $id_klinik
+        );
+
         $query = $this->db->select_sum('harga')
-                        ->where('id_klinik', $id_klinik)
-                        ->get('rekamedis_view');
+                    ->where($whereCondition)
+                    ->get('rekamedis_view');
         
         return $query->row()->harga;
     }
     public function getAllIncomeCibadak()
     {
+        $currentYear = date('Y');
+        $currentMonth = date('m');
         $id_klinik = 1;
 
+        $whereCondition = array(
+            'YEAR(date)' => $currentYear,
+            'MONTH(date)' => $currentMonth,
+            'id_klinik' => $id_klinik
+        );
+
         $query = $this->db->select_sum('harga')
-                        ->where('id_klinik', $id_klinik)
-                        ->get('rekamedis_view');
+                    ->where($whereCondition)
+                    ->get('rekamedis_view');
         
         return $query->row()->harga;
     }
     public function getAllIncomeBojongsoang()
     {
+        $currentYear = date('Y');
+        $currentMonth = date('m');
         $id_klinik = 3;
 
+        $whereCondition = array(
+            'YEAR(date)' => $currentYear,
+            'MONTH(date)' => $currentMonth,
+            'id_klinik' => $id_klinik
+        );
+
         $query = $this->db->select_sum('harga')
-                        ->where('id_klinik', $id_klinik)
-                        ->get('rekamedis_view');
+                    ->where($whereCondition)
+                    ->get('rekamedis_view');
         
         return $query->row()->harga;
     }

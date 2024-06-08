@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Income extends CI_Controller
+class Klinik_Cibadak extends CI_Controller
 {
     public function __construct()
     {
@@ -46,7 +46,7 @@ class Income extends CI_Controller
             $this->data['openMenu'] = $this->Showmenu_model->getDataOpenMenu($OpenShowMenu->id_menu_parent);
 
             $this->load->model("Menu_model");
-            $this->load->model("Income_model");
+            $this->load->model("Klinik/Klinik_cibadak_model");
             $this->load->helper("rupiah");
         }
     }
@@ -65,21 +65,19 @@ class Income extends CI_Controller
             'href' => site_url('Income')
         ];
 
-        $this->data['TotalIncome'] = $this->Income_model->getAllIncome();
-        $this->data['TotalIncomeLembang'] = $this->Income_model->getAllIncomeLembang();
-        $this->data['TotalIncomeCibadak'] = $this->Income_model->getAllIncomeCibadak();
-        $this->data['TotalIncomeBojongsoang'] = $this->Income_model->getAllIncomeBojongsoang(); 
+        $this->data['TotalIncome'] = $this->Klinik_cibadak_model->getAllIncome();
+        $this->data['TotalIncomeCibadak'] = $this->Klinik_cibadak_model->getAllIncomeCibadak();
 
         $this->load->view('component/header', $this->data);
         $this->load->view('component/sidebar', $this->data);
         $this->load->view('component/navbar', $this->data);
-        $this->load->view('Income/view', $this->data);
+        $this->load->view('Income/klinik/klinik-cibadak', $this->data);
         $this->load->view('component/footer', $this->data);
     }
 
     public function chartData()
     {
-        $data = $this->Income_model->getMonthlyIncome();
+        $data = $this->Klinik_cibadak_model->getMonthlyIncome();
         echo json_encode($data);
     }
 }

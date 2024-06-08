@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="<?= base_url('assets/') ?>vendor/css/theme-default.css" class="template-customizer-theme-css" />
   <link rel="stylesheet" href="<?= base_url('assets/') ?>css/demo.css" />
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script> -->
 
   <!-- Vendors CSS -->
   <link rel="stylesheet" href="<?= base_url('assets/') ?>vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
