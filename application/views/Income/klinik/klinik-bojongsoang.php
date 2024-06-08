@@ -13,66 +13,33 @@
                 <!-- Content wrapper -->
                 <div class="content-wrapper">
                     <div class="container-xxl flex-grow-1 container-p-y">
-                        <h3 class="mb-4 fw-bold">Income</h3>
+                        <h3 class="mb-4 fw-bold">Klinik Bojongsoang</h3>
                         <div class="row">
-                            <div class="col-sm-4 col-lg-4 mb-4">
-                                <a href="<?= site_url('Klinik/Klinik_Cibadak') ?>">
-                                    <div class="card">
-                                        <div class="card-body p-3">
-                                            <div class="d-flex justify-content-between">
-                                                <h6 class="mb-0">Klinik Cibadak</h6>
-                                                <small class="text-muted">Current Month</small>
-                                            </div>
-                                            <hr class="my-2">
-                                            <h2 class="fw-bold"><?= rupiah($TotalIncomeCibadak) ?></h2>
-                                        </div>
+                            <div class="col-sm-6 col-lg-12 mb-4">
+                                <div class="card">
+                                    <div class="mt-3 col-sm-2 mx-3">
+                                        <a href="<?= base_url('Income') ?>">
+                                            <button class="btn btn-sm btn-outline-danger justify-content-center" tabindex="0" aria-controls="DataTables_Table_0" type="button">
+                                                <i class='bx bx-chevron-left'></i>
+                                                <span>Kembali</span>
+                                            </button>
+                                        </a>
                                     </div>
-                                </a>
-                            </div>
-                            <div class="col-sm-6 col-lg-4 mb-4">
-                                <a href="<?= site_url('Klinik/Klinik_Lembang') ?>">
-                                    <div class="card">
-                                        <div class="card-body p-3">
-                                            <div class="d-flex justify-content-between">
-                                                <h6 class="mb-0">Klinik Lembang </h6>
-                                                <small class="text-muted">Current Month</small>
-                                            </div>
-                                            <hr class="my-2">
-                                            <h2 class="fw-bold"><?= rupiah($TotalIncomeLembang) ?></h2>
+                                    <div class="card-body p-3">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="mb-0">Total Income</h6>
+                                            <small class="text-muted">Total Income</small>
                                         </div>
+                                        <hr class="my-2">
+                                        <h1 class="fw-bold text-center"><?= rupiah($TotalIncomeBojongsoang) ?></h1>
                                     </div>
-                                </a>
-                            </div>
-                            <div class="col-sm-6 col-lg-4 mb-4">
-                                <a href="<?= site_url('Klinik/Klinik_Bojongsoang') ?>">
-                                    <div class="card">
-                                        <div class="card-body p-3">
-                                            <div class="d-flex justify-content-between">
-                                                <h6 class="mb-0">Klinik Bojongsoang</h6>
-                                                <small class="text-muted">Current Month</small>
-                                            </div>
-                                            <hr class="my-2">
-                                            <h2 class="fw-bold"><?= rupiah($TotalIncomeBojongsoang) ?></h2>
-                                        </div>
-                                    </div>
-                                </a>
+                                </div>
                             </div>
                             <div class="col-sm-9 col-lg-12 mb-4">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between">
-                                            <h4 class="fw-bold">Total Income</h4>
-                                            <!-- <div class="d-flex justify-content-between">
-                                            <div class="">
-                                                <input type="date" id="startDate" class="form-control">
-                                            </div>
-                                            <div class="">
-                                                <p class="pt-2">To :</p>
-                                            </div>
-                                            <div class="">
-                                                <input type="date" id="endDate" class="form-control">
-                                            </div>
-                                        </div> -->
+                                            <h4 class="fw-bold">Income Chart</h4>
                                         </div>
                                         <canvas id="myChart" height="100px"></canvas>
                                     </div>
@@ -89,7 +56,7 @@
     <script>
         $(document).ready(function() {
             $.ajax({
-                url: "<?php echo site_url('Income/chartData'); ?>",
+                url: "<?php echo site_url('Klinik/Klinik_Cibadak/chartData'); ?>",
                 type: "GET",
                 dataType: "json",
                 success: function(data) {
