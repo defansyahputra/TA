@@ -45,4 +45,24 @@ class Klinik_cibadak_model extends CI_Model
         }
         return $result;
     }
+
+    public function getTotalIncomeByDateRangeAndCategory($startDate = null, $endDate = null, $category = null) {
+        $id_klinik = 1;
+
+        $this->db->select('SUM(harga) as totalIncome');
+        $this->db->from('rekamedis_view');
+        $this->db->where('id_klinik', $id_klinik);
+
+        if (!empty($startDate) && !empty($endDate)) {
+            $this->db->where('date >=', $startDate);
+            $this->db->where('date <=', $endDate);
+        }
+
+        if (!empty($category) && ($category === 'Umum' || $category === 'Orthodentist')) {
+            $this->db->where('kategori_pasien', $category);
+        }
+
+        $query = $this->db->get();
+        return $query->row();
+    }
 }

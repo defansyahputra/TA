@@ -80,4 +80,14 @@ class Klinik_Bojongsoang extends CI_Controller
         $data = $this->Klinik_bojongsoang_model->getMonthlyIncome();
         echo json_encode($data);
     }
+
+    public function getTotalIncomeByDateRange() {
+        $startDate = $this->input->get('startDate');
+        $endDate = $this->input->get('endDate');
+        $category = $this->input->get('category');
+
+        $totalIncome = $this->Klinik_bojongsoang_model->getTotalIncomeByDateRangeAndCategory($startDate, $endDate, $category);
+
+        echo json_encode($totalIncome);
+    }
 }

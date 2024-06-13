@@ -27,11 +27,28 @@
                             </div>
                                 <div class="card-body p-3">
                                     <div class="d-flex justify-content-between">
-                                        <h6 class="mb-0">Total Income</h6>
-                                        <small class="text-muted">Total Income</small>
+                                        <h6 class="mb-0 pt-3">Total Income</h6>
+                                        <small class="text-muted d-flex gap-1">
+                                            <div>
+                                                <select name="category" id="category" class="form-select">
+                                                    <option value="">Pilih Kategori Pasien</option>
+                                                    <option value="Umum">Umum</option>
+                                                    <option value="Orthodentist">Orthodentist</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <input type="date" id="startDate" class="form-control">
+                                            </div>
+                                            <div>
+                                                <label class="pt-2">To :</label>
+                                            </div>
+                                            <div>
+                                                <input type="date" id="endDate" class="form-control">
+                                            </div>
+                                        </small>
                                     </div>
                                     <hr class="my-2">
-                                    <h1 class="fw-bold text-center"><?= rupiah($TotalIncomeCibadak) ?></h1>
+                                    <h1 class="fw-bold text-center pt-3" id="totalIncome"></h1>
                                 </div>
                             </div>
                         </div>
@@ -55,69 +72,97 @@
 <script type="module" src="https://unpkg.com/chart.js@4.2.1/dist/chart.umd.js"></script>
 <script>
     $(document).ready(function() {
-        $.ajax({
-            url: "<?php echo site_url('Klinik/Klinik_Cibadak/chartData'); ?>",
-            type: "GET",
-            dataType: "json",
-            success: function(data) {
-                const labels = data.map(entry => {
-                    const date = new Date(entry.year, entry.month - 1);
-                    const monthName = date.toLocaleString('default', { month: 'long' });
-                    return `${monthName} ${entry.year}`;
-                });
-                const incomes = data.map(entry => entry.total_income);
+        function updateTotalIncome(startDate, endDate, category) {
+            $.ajax({
+                url: "<?php echo site_url('Klinik/Klinik_Cibadak/getTotalIncomeByDateRange'); ?>",
+                type: "GET",
+                data: {
+                    startDate: startDate,
+                    endDate: endDate,
+                    category: category
+                },
+                dataType: "json",
+                success: function(data) {
+                    $('#totalIncome').text('Rp.' + new Intl.NumberFormat('id-ID').format(data.totalIncome));
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error while fetching total income data: ", error);
+                }
+            });
+        }
 
-                new Chart("myChart", {
-                    type: "line",
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: "Total Income",
-                            fill: true,
-                            pointRadius: 3,
-                            borderColor: "rgba(39,146,245,0.68)",
-                            backgroundColor: "rgba(39,146,245,0.22)",
-                            data: incomes
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { display: true },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        const value = context.raw;
-                                        return 'Rp.' + new Intl.NumberFormat('id-ID').format(value);
+        function updateChartData() {
+            $.ajax({
+                url: "<?php echo site_url('Klinik/Klinik_Cibadak/chartData'); ?>",
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    const labels = data.map(entry => {
+                        const date = new Date(entry.year, entry.month - 1);
+                        const monthName = date.toLocaleString('default', { month: 'long' });
+                        return `${monthName} ${entry.year}`;
+                    });
+                    const incomes = data.map(entry => entry.total_income);
+
+                    new Chart("myChart", {
+                        type: "line",
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: "Total Income",
+                                fill: true,
+                                pointRadius: 3,
+                                borderColor: "rgba(39,146,245,0.68)",
+                                backgroundColor: "rgba(39,146,245,0.22)",
+                                data: incomes
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: true },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const value = context.raw;
+                                            return 'Rp.' + new Intl.NumberFormat('id-ID').format(value);
+                                        }
                                     }
                                 }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Month'
-                                }
                             },
-                            y: {
-                                title: {
-                                    display: false,
-                                    text: 'Total Income'
+                            scales: {
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Month'
+                                    }
                                 },
-                                ticks: {
-                                    callback: function(value, index, values) {
-                                        return 'Rp.' + new Intl.NumberFormat('id-ID').format(value);
+                                y: {
+                                    title: {
+                                        display: false,
+                                        text: 'Total Income'
+                                    },
+                                    ticks: {
+                                        callback: function(value, index, values) {
+                                            return 'Rp.' + new Intl.NumberFormat('id-ID').format(value);
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error("Error while fetching chart data: ", error);
-            }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error while fetching chart data: ", error);
+                }
+            });
+        }
+
+        updateChartData();
+        updateTotalIncome($('#startDate').val(), $('#endDate').val(), $('#category').val());
+
+        $('#startDate, #endDate, #category').change(function() {
+            updateTotalIncome($('#startDate').val(), $('#endDate').val(), $('#category').val());
         });
     });
 </script>

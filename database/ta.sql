@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 08, 2024 at 12:38 PM
+-- Generation Time: Jun 13, 2024 at 06:13 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -163,6 +163,7 @@ CREATE TABLE `rekamedis_view` (
 ,`harga` varchar(128)
 ,`date` date
 ,`id_klinik` int(10)
+,`kategori_pasien` enum('Umum','Orthodentist')
 );
 
 -- --------------------------------------------------------
@@ -354,7 +355,9 @@ INSERT INTO `tb_rekamedis` (`id_rekamedis`, `id_pasien`, `id_kategori_tindakan`,
 (17, 9, 2, 2, 'tes', 'tes', 'tes', '34', '300000', '2024-06-08'),
 (18, 9, 7, 3, 'tes', 'tes', 'tes', '34', '450000', '2024-06-08'),
 (19, 12, 2, 1, 'coba', 'coba', 'coba', '34', '250.000', '2024-06-08'),
-(20, 12, 2, 2, 'lagi', 'lagi', 'lagi', '27', '300000', '2024-06-08');
+(20, 12, 2, 2, 'lagi', 'lagi', 'lagi', '27', '300000', '2024-06-08'),
+(21, 9, 2, 2, 'ztindakan', 'ztindakan', 'ztindakan', '34', '350000', '2024-06-08'),
+(22, 5, 2, 1, 'ztindakan', 'ztindakan', 'ztindakan', '34', '350000', '2024-06-08');
 
 -- --------------------------------------------------------
 
@@ -452,7 +455,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `id_klinik`, `kategori_pasien`, `username`, `password`, `email`, `nohp`, `tanggal_lahir`, `jenis_kelamin`, `alamat`, `activated`, `banned`, `ban_reason`, `new_password_key`, `new_password_requested`, `new_email`, `new_email_key`, `approved`, `meta`, `last_ip`, `last_login`, `created`, `modified`) VALUES
 (1, 0, '', 'admin', '$2a$10$gtANPNMiG2UEL9fPbbJaBOKY1juVGP8PhYCKJWuV6yYIuz29qJF7W', 'defansyahputra@gmail.com', '', NULL, '', '', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"62c4714b325a0\";s:4:\"name\";s:11:\"Raihan Arif\";}', '::1', '2024-03-08 11:36:07', '2022-07-05 19:13:47', '2024-03-15 06:13:34'),
-(2, 0, '', 'sup_admin', '$2a$10$.45q.HlDPIiFaaILIMJfHe7YXmqSKqB8AtZXlplDZgWLqTeBszIzu', 'khuzen.ard@gmail.com', '', NULL, '', '', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"65d085a3965ff\";s:4:\"name\";s:20:\"Khuzainil Ardiansyah\";}', '::1', '2024-06-08 11:14:45', '2024-02-17 11:08:35', '2024-06-08 09:14:45'),
+(2, 0, '', 'sup_admin', '$2a$10$.45q.HlDPIiFaaILIMJfHe7YXmqSKqB8AtZXlplDZgWLqTeBszIzu', 'khuzen.ard@gmail.com', '', NULL, '', '', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"65d085a3965ff\";s:4:\"name\";s:20:\"Khuzainil Ardiansyah\";}', '::1', '2024-06-13 13:15:53', '2024-02-17 11:08:35', '2024-06-13 11:15:53'),
 (3, 1, 'Umum', 'JohnDoe', '$2a$10$EdqClq.6p6WLn28DWn.s/ORI7z1bq4L257o0GVzqO79ANNpAbC/1W', 'JohnDoe@gmail.com', '6281234567890', '1999-05-15', 'P', '123 Main Street, Anytown', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"664f4878f33b7\";s:4:\"name\";s:8:\"John Doe\";}', '::1', '0000-00-00 00:00:00', '2024-05-23 15:45:29', '2024-05-23 13:45:29'),
 (4, 1, 'Orthodentist', 'JaneSmith', '$2a$10$6p8aYKt9SKw8Oh6S.W8zOe9GswxPrLljEePzELDqIWCN0kFZBGtVi', 'JaneSmith@gmail.com', '6282345678901', '1985-10-25', 'W', '456 Oak Avenue, Somewhereville', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"664f48b4d9723\";s:4:\"name\";s:10:\"Jane Smith\";}', '::1', '0000-00-00 00:00:00', '2024-05-23 15:46:28', '2024-05-23 13:46:28'),
 (5, 2, 'Umum', 'AhmadRahman', '$2a$10$KvFX4NUmjTVHn4I5pbdZMesrE0ij5Afecu2.NEio4ZUGsoEUh7i5S', 'AhmadRahman@gmail.com', '6283456789012', '1995-02-08', 'P', '789 Elm Road, Elsewhere City', 1, 0, NULL, NULL, NULL, NULL, NULL, 1, 'a:2:{s:4:\"foto\";s:13:\"664f4903327d6\";s:4:\"name\";s:12:\"Ahmad Rahman\";}', '::1', '0000-00-00 00:00:00', '2024-05-23 15:47:47', '2024-05-23 13:47:47'),
@@ -577,7 +580,7 @@ CREATE TABLE `view_tindakan` (
 --
 DROP TABLE IF EXISTS `rekamedis_view`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `rekamedis_view`  AS SELECT `r`.`id_rekamedis` AS `id_rekamedis`, `r`.`id_pasien` AS `id_pasien`, `up`.`name` AS `pasien_name`, `r`.`id_kategori_tindakan` AS `id_kategori_tindakan`, `kt`.`kategori_tindakan` AS `kategori_tindakan`, `r`.`id_tindakan` AS `id_tindakan`, `t`.`tindakan` AS `tindakan`, `r`.`subject` AS `subject`, `r`.`object` AS `object`, `r`.`plan` AS `plan`, `r`.`gigi` AS `gigi`, `r`.`harga` AS `harga`, `r`.`date` AS `date`, `u`.`id_klinik` AS `id_klinik` FROM ((((`tb_rekamedis` `r` join `user_profiles` `up` on(`r`.`id_pasien` = `up`.`id`)) join `tb_kategori_tindakan` `kt` on(`r`.`id_kategori_tindakan` = `kt`.`id_kategori_tindakan`)) join `tb_tindakan` `t` on(`r`.`id_tindakan` = `t`.`id_tindakan`)) join `users` `u` on(`u`.`id` = `r`.`id_pasien`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `rekamedis_view`  AS SELECT `r`.`id_rekamedis` AS `id_rekamedis`, `r`.`id_pasien` AS `id_pasien`, `up`.`name` AS `pasien_name`, `r`.`id_kategori_tindakan` AS `id_kategori_tindakan`, `kt`.`kategori_tindakan` AS `kategori_tindakan`, `r`.`id_tindakan` AS `id_tindakan`, `t`.`tindakan` AS `tindakan`, `r`.`subject` AS `subject`, `r`.`object` AS `object`, `r`.`plan` AS `plan`, `r`.`gigi` AS `gigi`, `r`.`harga` AS `harga`, `r`.`date` AS `date`, `u`.`id_klinik` AS `id_klinik`, `u`.`kategori_pasien` AS `kategori_pasien` FROM ((((`tb_rekamedis` `r` join `user_profiles` `up` on(`r`.`id_pasien` = `up`.`id`)) join `tb_kategori_tindakan` `kt` on(`r`.`id_kategori_tindakan` = `kt`.`id_kategori_tindakan`)) join `tb_tindakan` `t` on(`r`.`id_tindakan` = `t`.`id_tindakan`)) join `users` `u` on(`u`.`id` = `r`.`id_pasien`)) ;
 
 -- --------------------------------------------------------
 
@@ -729,7 +732,7 @@ ALTER TABLE `tb_pasien`
 -- AUTO_INCREMENT for table `tb_rekamedis`
 --
 ALTER TABLE `tb_rekamedis`
-  MODIFY `id_rekamedis` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_rekamedis` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `tb_reservasi`
