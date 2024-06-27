@@ -90,6 +90,10 @@ class Reservasi extends CI_Controller
 
 			$this->data['list_klinik'] = $this->Reservasi_model->getAllKlinik();
 			$this->data['list_reservasi'] = $this->Reservasi_model->getAllReservasi();
+			
+			$this->data['keterangan_cibadak'] = $this->Reservasi_model->getKetCibadak();
+			$this->data['keterangan_lembang'] = $this->Reservasi_model->getKetLembang();
+			$this->data['keterangan_bojongsoang'] = $this->Reservasi_model->getKetBojongsoang();
     
             $this->load->view('component/header', $this->data);
 			$this->load->view('component/sidebar', $this->data);

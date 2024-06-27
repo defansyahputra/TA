@@ -95,4 +95,142 @@ class Appointment extends CI_Controller
         // Redirect to appointments list
         redirect('Appointment');
     }
+
+	public function jadwal()
+	{
+		$this->data['breadcrumbs'] = [];
+
+			$this->data['breadcrumbs'][] = [
+				'active' => FALSE,
+				'text' => 'Appointment / ',
+				'class' => 'breadcrumb-item pe-3',
+				'href' => ''
+			];
+
+			$this->data['breadcrumbs'][] = [
+				'active' => TRUE,
+				'text' => 'Atur Jadwal',
+				'class' => 'breadcrumb-item pe-3 text-gray-400',
+				'href' => site_url('Appointment')
+			];
+
+			$this->data['list_jadwal'] = $this->Appointment_model->getAllJadwal();
+
+			$this->load->view('component/header', $this->data);
+			$this->load->view('component/sidebar', $this->data);
+			$this->load->view('component/navbar', $this->data);
+			$this->load->view('reservasi/data_jadwal', $this->data);
+			$this->load->view('component/footer', $this->data);
+	}
+
+	public function addJadwal()
+	{
+		$this->form_validation->set_rules('klinik', 'Klinik', 'required');
+		$this->form_validation->set_rules('jadwal', 'Jadwal', 'required');
+
+		if ($this->form_validation->run() == TRUE) {
+			$data = array(
+				'klinik_id' => decrypt_url($this->input->post('klinik')),
+				'jadwal' => $this->input->post('jadwal'),
+			);
+
+			$this->Appointment_model->addJadwal($data);
+			redirect('Appointment');
+		} else {
+			$this->data['selected_klinik'] = $this->input->post('klinik');
+			$this->data['jadwal'] = $this->input->post('jadwal');
+
+			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+			$this->data['action'] = site_url('Appointment/addJadwal');
+			$this->data['url'] = site_url('Appointment');
+			$this->data['title'] = "Atur Jadwal";
+
+			$this->data['breadcrumbs'] = [];
+
+			$this->data['breadcrumbs'][] = [
+				'active' => FALSE,
+				'text' => 'Appointment / ',
+				'class' => 'breadcrumb-item pe-3',
+				'href' => ''
+			];
+
+			$this->data['breadcrumbs'][] = [
+				'active' => TRUE,
+				'text' => 'Atur Jadwal',
+				'class' => 'breadcrumb-item pe-3 text-gray-400',
+				'href' => site_url('Appointment')
+			];
+
+			$this->data['list_klinik'] = $this->Appointment_model->getAllKlinik();
+
+			$this->load->view('component/header', $this->data);
+			$this->load->view('component/sidebar', $this->data);
+			$this->load->view('component/navbar', $this->data);
+			$this->load->view('reservasi/form_jadwal', $this->data);
+			$this->load->view('component/footer', $this->data);
+		}
+	}
+
+	public function updateJadwal($id_jadwal)
+	{
+		$this->form_validation->set_rules('klinik', 'Klinik', 'required');
+		$this->form_validation->set_rules('jadwal', 'Jadwal', 'required');
+
+		if ($this->form_validation->run() == TRUE) {
+			$data = array(
+				'klinik_id' => decrypt_url($this->input->post('klinik')),
+				'jadwal' => $this->input->post('jadwal'),
+			);
+
+			$condition['id_jadwal'] = $id_jadwal;
+			$this->Appointment_model->updateJadwal($data, $condition);
+			redirect('Appointment/jadwal');
+		} else {
+			$jadwal = $this->Appointment_model->getJadwal($id_jadwal);
+
+			$this->data['selected_klinik'] = $jadwal->klinik_id;
+			$this->data['jadwal'] = $jadwal->jadwal;
+
+			if ($this->input->post()) {
+				$this->data['klinik_id'] = $this->input->post('klinik');
+				$this->data['jadwal'] = $this->input->post('jadwal');
+			}
+
+			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+			$this->data['action'] = site_url('Appointment/updateJadwal/' .$id_jadwal);
+			$this->data['url'] = site_url('Appointment');
+			$this->data['title'] = "Atur Jadwal";
+
+			$this->data['breadcrumbs'] = [];
+
+			$this->data['breadcrumbs'][] = [
+				'active' => FALSE,
+				'text' => 'Appointment / ',
+				'class' => 'breadcrumb-item pe-3',
+				'href' => ''
+			];
+
+			$this->data['breadcrumbs'][] = [
+				'active' => TRUE,
+				'text' => 'Atur Jadwal',
+				'class' => 'breadcrumb-item pe-3 text-gray-400',
+				'href' => site_url('Appointment')
+			];
+
+			$this->data['list_klinik'] = $this->Appointment_model->getAllKlinik();
+
+			$this->load->view('component/header', $this->data);
+			$this->load->view('component/sidebar', $this->data);
+			$this->load->view('component/navbar', $this->data);
+			$this->load->view('reservasi/form_jadwal', $this->data);
+			$this->load->view('component/footer', $this->data);
+		}
+	}
+
+	public function deleteJadwal($id_jadwal)
+	{
+		$condition['id_jadwal'] = $id_jadwal;
+		$this->Appointment_model->deleteJadwal($condition);
+		redirect('Appointment/jadwal');
+	}
 }

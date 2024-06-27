@@ -30,4 +30,47 @@ class Reservasi_model extends CI_Model
 
         return $query->result();
     }
+
+    public function getKetCibadak()
+    {
+        $id_klinik = 1;
+
+        $whereCondition = array(
+            'klinik_id' => $id_klinik
+        );
+
+        $query = $this->db->select('jadwal')
+                    ->where($whereCondition)
+                    ->get('tb_jadwal');
+        
+        return $query->row()->jadwal;
+    }
+    public function getKetLembang()
+    {
+        $id_klinik = 2;
+
+        $whereCondition = array(
+            'klinik_id' => $id_klinik
+        );
+
+        $query = $this->db->select('jadwal')
+                    ->where($whereCondition)
+                    ->get('tb_jadwal');
+        
+        return $query->row()->jadwal;
+    }
+    public function getKetBojongsoang()
+    {
+        $id_klinik = 3;
+
+        $whereCondition = array(
+            'klinik_id' => $id_klinik
+        );
+
+        $query = $this->db->select('jadwal')
+                    ->where($whereCondition)
+                    ->get('tb_jadwal');
+        
+        return $query->row()->jadwal;
+    }
 }

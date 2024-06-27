@@ -33,7 +33,6 @@
                 <?php echo ($breadcrumb['active'] == TRUE) ? '<a href="' . $breadcrumb['href'] . '" class="pe-3 text-muted">' : NULL; ?>
                 <?php echo $breadcrumb['text']; ?>
                 <?php echo ($breadcrumb['active'] == TRUE) ? '</a>' : NULL; ?>
-              </span>
             <?php } ?>
           </span>
           <div class="row pt-2">
@@ -41,35 +40,36 @@
             <div class="col-xxl">
               <div class="card mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                  <h4 class="mb-0 fw-bold">Pengaturan</h4>
-                  <small class="text-muted float-end">Tambah tindakan</small>
+                  <h4 class="mb-0 fw-bold">Jadwal</h4>
+                  <small class="text-muted float-end">Atur Jadwal</small>
                 </div>
                 <div class="card-body">
                   <form class="form-horizontal" role="form" action="<?php echo $action; ?>" method="POST">
-                    <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label" for="kategori_tindakan">Kategori tindakan</label>
-                        <div class="col-sm-10">
-                            <select name="kategori_tindakan" class="form-select" data-control="select2" data-placeholder="Pilih Kategori tindakan . . .">
-                                <option value="">Pilih Kategori tindakan</option>
-                                <?php foreach ($list_kategori_tindakan as $kategori_tindakan): ?>
-                                    <option value="<?= encrypt_url($kategori_tindakan->id_kategori_tindakan); ?>" <?= ($kategori_tindakan->id_kategori_tindakan == $selected_kategori_tindakan) ? 'selected' : ''; ?>>
-                                        <?= $kategori_tindakan->kategori_tindakan; ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                            <span style="color: red;"><?= form_error('kategori_tindakan'); ?></span>
-                        </div>
+                  <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="klinik">Pilih Klinik</label>
+                    <div class="col-sm-10">
+                        <select name="klinik" class="form-select" data-control="select2" data-placeholder="Pilih Kategori tindakan . . .">
+                            <option value="">Pilih Klinik</option>
+                            <?php foreach ($list_klinik as $klinik): ?>
+                                <option value="<?= encrypt_url($klinik->id_klinik); ?>" <?= ($klinik->id_klinik == $selected_klinik) ? 'selected' : ''; ?>>
+                                    <?= $klinik->klinik; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span style="color: red;"><?= form_error('klinik'); ?></span>
                     </div>
-                    <div class="row mb-3">
-                      <label class="col-sm-2 col-form-label" for="tindakan">Nama tindakan</label>
+                </div>  
+                  <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label" for="jadwal">Keterangan</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" name="tindakan" placeholder="Masukkan tindakan Tindakan . . ." autocomplete="off" value="<?php if (isset($tindakan)) { echo $tindakan; } ?>">
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label class="col-sm-2 col-form-label" for="harga">Harga</label>
-                      <div class="col-sm-10">
-                        <input type="text" class="form-control" name="harga" placeholder="Masukkan Tindakan Harga. . ." autocomplete="off" value="<?php if (isset($harga)) { echo $harga; } ?>">
+                        <input 
+                        type="text" 
+                        class="form-control" 
+                        name="jadwal" 
+                        placeholder="Masukkan Keterangan . . ." 
+                        value="<?php if (isset($jadwal)) {
+                                echo $jadwal;
+                                  } ?>">
                       </div>
                     </div>
                     <div class="row justify-content-end">

@@ -12,7 +12,17 @@
             <div class="card pb-3 px-4">
               <!-- Table Header -->
               <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-header fw-bold px-0 pt-3 pb-3">List Data Appointment</h5> 
+                <h5 class="card-header fw-bold px-0 pt-3 pb-3">List Data Appointment</h5>
+                <div class="table-responsive text-nowrap">
+                  <div class="pb-3 pt-4">
+                      <a href="<?= base_url('Appointment/jadwal') ?>">
+                          <button class="btn btn-outline-primary" tabindex="0" aria-controls="DataTables_Table_0" type="button">
+                              <i class='bx bx-time'>&nbsp</i>
+                              <span class="d-none d-sm-inline-block">Manajemen Jadwal</span>
+                          </button>
+                      </a>
+                  </div>
+              </div>
               </div>
 
               <!-- Table Content -->

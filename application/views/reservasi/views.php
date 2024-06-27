@@ -16,6 +16,48 @@
                             </span>
                         <?php } ?>
                     </h6>
+                    <div class="row">
+                            <div class="col-sm-4 col-lg-4 mb-4">
+                                <div class="card">
+                                    <div class="card-body p-3">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="mb-0">Klinik Cibadak</h6>
+                                            <small class="text-muted">Keterangan</small>
+                                        </div>
+                                        <hr class="my-2">
+                                        <p class="text-center"><?= $keterangan_cibadak ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4 mb-4">
+                                <a href="<?= site_url('Klinik/Klinik_Lembang') ?>">
+                                    <div class="card">
+                                        <div class="card-body p-3">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="mb-0">Klinik Lembang </h6>
+                                                <small class="text-muted">Keterangan</small>
+                                            </div>
+                                            <hr class="my-2">
+                                            <p class="text-center"><?= $keterangan_lembang ?></p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-lg-4 mb-4">
+                                <a href="<?= site_url('Klinik/Klinik_Bojongsoang') ?>">
+                                    <div class="card">
+                                        <div class="card-body p-3">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="mb-0">Klinik Bojongsoang</h6>
+                                                <small class="text-muted">Keterangan</small>
+                                            </div>
+                                            <hr class="my-2">
+                                            <p class="text-center"><?= $keterangan_bojongsoang ?></p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
                     <div class="row d-flex justify-content-between">
                         <div class="col-lg-6">
                             <div class="card pb-3 px-4">
